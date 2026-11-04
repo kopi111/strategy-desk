@@ -71,6 +71,13 @@ test('the gold trend rule follows the averages, and reports a stop that was hit'
 test('the pages never call a losing or untested market proven', () => {
   assert.match(APA.potentialTradeBacktest.describe('frxXAUUSD').text, /lost money/);
   assert.match(APA.potentialTradeBacktest.describe('frxEURUSD').text, /not tested/);
+  assert.match(APA.potentialTradeBacktest.describe('1HZ90V').text, /no proven edge/);
+});
+
+test('every Volatility index on the Desk has a backtest figure', () => {
+  const vix = APA.instruments.defaults.filter((instrument) => instrument.name.startsWith('Volatility'));
+  assert.equal(vix.length, 18);
+  for (const instrument of vix) assert.doesNotMatch(APA.potentialTradeBacktest.describe(instrument.symbol).text, /not tested/, instrument.symbol);
 });
 
 console.log('All potential trade tests passed.');

@@ -63,8 +63,9 @@ A setup needs the 1H and 4H trends to agree, a 15-minute order block or FVG at o
 price, a sweep or MSS in the last 16 candles, and at least 1R of reward. The stop is half an average candle past the
 zone and the take profit is the last 24 hours' high or low. The rule is in `js/core/potential-trade.js`.
 
-`research/potential-trade/backtest.mjs` runs that same code through history. **The rule lost money after spread on all
-11 markets tested**, with no clear gain over shuffled candles, so a potential trade is not a recommendation. Forex and
+`research/potential-trade/backtest.mjs` runs that same code through history. **The rule lost money after spread on 18
+of the 19 markets tested**, with no clear gain over shuffled candles, so a potential trade is not a recommendation. The
+exception, V90 1s at +0.020R a trade on an assumed spread, made about the same on shuffled candles (+0.011R). Forex and
 the other markets without a figure have not been tested. If the rule changes, run the backtest again and update
 `js/core/potential-trade-backtest.js`.
 

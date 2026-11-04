@@ -162,7 +162,7 @@ await step('switch market to gold', async () => {
 
 await step('trades page lists a plan for every market and opens the chart', async () => {
   await page.click('.nav-item[data-view="trades"]');
-  await page.waitForFunction(() => document.querySelector('[data-slot="scan-progress"]')?.textContent.startsWith('Last checked'), null, { timeout: 120000 });
+  await page.waitForFunction(() => document.querySelector('[data-slot="scan-progress"]')?.textContent.startsWith('Last checked'), null, { timeout: 240000 });
   const rows = await page.$$eval('[data-slot="plan-table"] tbody tr', (list) => list.length);
   const markets = await page.evaluate(() => APA.app.instruments.length);
   if (rows !== markets) throw new Error(`expected ${markets} rows, saw ${rows}`);

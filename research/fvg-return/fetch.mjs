@@ -1,12 +1,14 @@
 // Downloads Volatility index candles from Deriv's public API into data/, one request at a time.
-// Run: node research/fvg-return/fetch.mjs
+// Run: node research/fvg-return/fetch.mjs               (the ten markets of the study, all timeframes)
+//      node research/fvg-return/fetch.mjs 15m R_15 R_30  (only the named timeframe and markets)
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const DATA = join(dirname(fileURLToPath(import.meta.url)), 'data');
-const MARKETS = ['R_10', 'R_25', 'R_50', 'R_75', 'R_100', '1HZ10V', '1HZ25V', '1HZ50V', '1HZ75V', '1HZ100V'];
-const TIMEFRAMES = [{ label: '5m', seconds: 300, days: 370 }, { label: '15m', seconds: 900, days: 370 }, { label: '1h', seconds: 3600, days: 370 }];
+const [ONLY_TIMEFRAME, ...ONLY_MARKETS] = process.argv.slice(2);
+const MARKETS = ONLY_MARKETS.length ? ONLY_MARKETS : ['R_10', 'R_25', 'R_50', 'R_75', 'R_100', '1HZ10V', '1HZ25V', '1HZ50V', '1HZ75V', '1HZ100V'];
+const TIMEFRAMES = [{ label: '5m', seconds: 300, days: 370 }, { label: '15m', seconds: 900, days: 370 }, { label: '1h', seconds: 3600, days: 370 }].filter(({ label }) => !ONLY_TIMEFRAME || label === ONLY_TIMEFRAME);
 const PAGE = 5000;
 const REQUESTS_PER_CONNECTION = 150;
 const RETRIES = 5;

@@ -111,7 +111,7 @@
         ${!this.isLive() ? emptyState('Live prices only', 'Potential trades only run on live Deriv prices. Check the data source.') : ''}
         ${sorted.length ? `<div class="table-wrap"><table data-slot="plan-table"><thead><tr><th>Market</th><th>Side</th><th>When</th><th class="num">Entry</th><th class="num">Stop</th><th class="num">TP</th><th class="num">Reward</th><th>Backtest</th></tr></thead>
           <tbody>${sorted.map((instrument) => this.planRow(instrument)).join('')}</tbody></table></div>` : ''}
-        <p class="muted trades-note">A setup means the 1H and 4H trends agree, price is at or near a 15-minute order block or FVG, and a sweep or MSS happened in the last 4 hours. The stop sits half an average candle past the zone, and the TP is the last 24 hours' high or low. Backtested on about a year of Vix and 3.75 years of gold, this rule lost money after spread on all 11 markets tested.</p>`;
+        <p class="muted trades-note">A setup means the 1H and 4H trends agree, price is at or near a 15-minute order block or FVG, and a sweep or MSS happened in the last 4 hours. The stop sits half an average candle past the zone, and the TP is the last 24 hours' high or low. Backtested on 10 to 12 months of the 18 Vix markets and 3.75 years of gold, this rule lost money after spread on 18 of 19 markets. The other, V90 1s, made +0.020R a trade, about the same as on shuffled candles.</p>`;
     },
 
     /** One market's row. Clicking the market opens its chart, where the lines are drawn. */

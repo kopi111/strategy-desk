@@ -15,7 +15,7 @@ const SECONDS = { '5m': 300, '15m': 900, '1h': 3600 };
 export const HORIZONS = [5, 20, 100, 500];
 const LONGEST_HORIZON = 500;
 // Spread as a share of price, from the desk's instrument list. The three marked below have no listed spread, so they borrow the sibling's.
-export const SPREAD_SHARE = { R_10: 0.6 / 4860, R_25: 1.2 / 2930, R_50: 0.05 / 99, R_75: 25 / 34800, R_100: 0.4 / 570, '1HZ10V': 0.6 / 4860, '1HZ25V': 1.2 / 2930, '1HZ50V': 0.05 / 99, '1HZ75V': 2 / 4660, '1HZ100V': 0.4 / 1315 };
+export const SPREAD_SHARE = { R_10: 0.6 / 4860, R_25: 1.2 / 2930, R_50: 0.05 / 99, R_75: 25 / 34800, R_100: 0.4 / 570, '1HZ10V': 0.6 / 4860, '1HZ25V': 1.2 / 2930, '1HZ50V': 0.05 / 99, '1HZ75V': 2 / 4660, '1HZ100V': 0.4 / 1315, R_15: 12.7 / 103000, R_30: 38.9 / 94800, R_90: 98.9 / 141000, '1HZ15V': 1.7 / 13700, '1HZ30V': 2.5 / 6170, '1HZ90V': 9.3 / 30700, '1HZ150V': 0.02 / 54, '1HZ250V': 0.00007 / 0.24 };
 const SHUFFLE_RUNS = 5;
 
 // The same gap rule the Desk draws: minimum gap of 0.25 of the 50-candle average range.
