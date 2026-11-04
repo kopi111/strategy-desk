@@ -1,0 +1,20 @@
+{
+  "symbols": ["R_75", "R_100", "1HZ100V", "frxXAUUSD", "frxEURUSD"],
+  "timeframe": "15m",
+  "concepts": {
+    "bos": false,
+    "mss": true,
+    "fvg": false,
+    "ob": true,
+    "sweep": false,
+    "ifvg": false,
+    "breaker": false,
+    "ote": true,
+    "sd": false,
+    "sr": false,
+    "breakout": true,
+    "crt": true,
+    "silverBullet": true,
+    "powerOf3": true
+  }
+}

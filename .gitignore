@@ -71,3 +71,6 @@ logs/
 submissions.csv
 vw-data/
 backups/
+
+# Downloaded candles for the FVG study, can be fetched again
+research/fvg-return/data/

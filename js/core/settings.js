@@ -37,10 +37,31 @@
     },
     risk: { balance: 10000, riskPercent: 1, maxRiskPercent: 2 },
     backtest: { slippagePrice: 0, commissionPerLot: 0, startingBalance: 10000 },
-    chart: { showZones: true, showMarkers: true, showTradeLines: true, maxZonesShown: 8 },
+    // The first picture's markup is on by default. The older APA overlays stay available but start off, to avoid clutter.
+    chart: {
+      showApaZones: false, showApaMarkers: false, showApaTradeLines: false, maxZonesShown: 8,
+      showDetails: true,
+      showPotentialTrade: true,
+      // The chart opens filling the window. "Exit full screen" or Esc returns to the normal page.
+      fullView: true,
+      markup: {
+        bos: true, mss: true, fvg: true, ob: true, sweep: true,
+        ifvg: false, breaker: false, ote: false, sd: false, sr: false, breakout: false, crt: false, silverBullet: false, powerOf3: false,
+      },
+    },
+    // Alerts run on real Deriv prices only. With everything on, these four markets fired about 205 alerts a day on 15m,
+    // so the most frequent concepts start muted (about 59 a day). Each one can be ticked on the Alerts page.
+    alerts: {
+      symbols: ['R_75', 'R_100', '1HZ100V', 'frxXAUUSD', 'frxEURUSD'],
+      timeframe: '15m',
+      concepts: {
+        bos: false, mss: true, fvg: false, ob: true, sweep: false,
+        ifvg: false, breaker: false, ote: true, sd: false, sr: false, breakout: true, crt: true, silverBullet: true, powerOf3: true,
+      },
+    },
     data: {
       source: 'auto',
-      derivEndpoint: 'wss://ws.derivws.com/websockets/v3',
+      derivEndpoint: 'wss://red.derivws.com/websockets/v3', // ws.derivws.com returns HTTP 520 from this network
       derivAppId: '1089',
       candleCount: 5000,
     },

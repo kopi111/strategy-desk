@@ -1,0 +1,283 @@
+Gold 1-minute candles: 1283440, 2023-01-02 to 2026-10-01. Price 1826.837 to 4175.575.
+
+===== 5m: DOES PRICE COME BACK? (256782 candles) =====
+Gaps: 29277
+Within N candles | reach gap edge | fill whole gap | fake: other side | fake: random moment | shuffled candles
+               5 |          68.9% |          43.3% |            68.4% |               63.5% |      76.2%
+              20 |          83.4% |          67.9% |            82.6% |               79.9% |      88.6%
+             100 |          92.4% |          85.0% |            91.6% |               91.0% |      95.1%
+             500 |          96.4% |          92.8% |            96.3% |               96.2% |      97.9%
+Median candles to the gap edge: 2. The other side: 2.
+Gap reached BEFORE the other side: 49.8% of 23603 (about +/-0.7%). Bullish gaps 49.4%, bearish gaps 50.2%. First 70% 49.6%, last 30% 50.3%. Shuffled: 49.8%.
+
+===== 15m: DOES PRICE COME BACK? (85633 candles) =====
+Gaps: 8680
+Within N candles | reach gap edge | fill whole gap | fake: other side | fake: random moment | shuffled candles
+               5 |          68.4% |          42.0% |            67.6% |               61.5% |      76.1%
+              20 |          82.4% |          66.2% |            81.5% |               78.2% |      88.5%
+             100 |          91.8% |          84.2% |            91.6% |               91.0% |      95.0%
+             500 |          96.1% |          92.5% |            96.0% |               95.6% |      97.9%
+Median candles to the gap edge: 2. The other side: 2.
+Gap reached BEFORE the other side: 50.4% of 6965 (about +/-1.2%). Bullish gaps 49.4%, bearish gaps 51.6%. First 70% 49.8%, last 30% 51.8%. Shuffled: 49.8%.
+
+===== 1h: DOES PRICE COME BACK? (21427 candles) =====
+Gaps: 1949
+Within N candles | reach gap edge | fill whole gap | fake: other side | fake: random moment | shuffled candles
+               5 |          65.5% |          39.5% |            65.4% |               62.6% |      76.0%
+              20 |          81.4% |          64.7% |            81.2% |               81.2% |      88.2%
+             100 |          91.3% |          82.5% |            90.7% |               91.7% |      95.2%
+             500 |          95.9% |          91.4% |            95.1% |               96.2% |      97.7%
+Median candles to the gap edge: 2. The other side: 2.
+Gap reached BEFORE the other side: 50.0% of 1615 (about +/-2.5%). Bullish gaps 47.6%, bearish gaps 52.9%. First 70% 49.9%, last 30% 50.4%. Shuffled: 49.9%.
+
+===== CAN IT BE TRADED? One trade at a time, after spread, in R =====
+Timeframe, session, rule                                              trades   win  before   after      t | first70 |  last30 |
+5m  all hours         no confirmation, gap stop, 1R                18115  49.0%  -0.024  -0.178  -23.3 |  -0.204 |  -0.119 | buys  -0.170 sells  -0.188
+5m  all hours         engulfing, gap stop, 1R                       4711  49.6%  -0.013  -0.095   -6.4 |  -0.125 |  -0.024 | buys  -0.088 sells  -0.103
+5m  all hours         engulfing, candle stop, 1R                    5439  50.0%  -0.005  -0.148  -10.6 |  -0.183 |  -0.060 | buys  -0.130 sells  -0.167
+5m  all hours         pin bar, gap stop, 1R                         6170  49.6%  -0.013  -0.122   -9.5 |  -0.146 |  -0.066 | buys  -0.103 sells  -0.146
+5m  all hours         pin bar, candle stop, 1R                      6953  48.9%  -0.026  -0.192  -15.8 |  -0.219 |  -0.125 | buys  -0.177 sells  -0.210
+5m  all hours         rejection close, gap stop, 1R                10562  49.6%  -0.013  -0.101  -10.2 |  -0.120 |  -0.056 | buys  -0.095 sells  -0.107
+5m  all hours         rejection close, candle stop, 1R             13584  49.3%  -0.018  -0.173  -19.7 |  -0.205 |  -0.100 | buys  -0.179 sells  -0.165
+5m  all hours         any of the three, gap stop, 1R               11674  49.7%  -0.012  -0.108  -11.5 |  -0.131 |  -0.055 | buys  -0.097 sells  -0.120
+5m  all hours         any of the three, candle stop, 1R            14652  49.1%  -0.020  -0.177  -21.1 |  -0.208 |  -0.105 | buys  -0.177 sells  -0.177
+5m  all hours         any, with the trend, gap stop, 1R             9319  49.9%  -0.007  -0.102   -9.7 |  -0.128 |  -0.042 | buys  -0.094 sells  -0.112
+5m  all hours         any, with the trend, candle stop, 1R         10952  49.3%  -0.017  -0.172  -17.8 |  -0.204 |  -0.098 | buys  -0.179 sells  -0.164
+5m  all hours         no confirmation, gap stop, 2R                13246  33.2%  -0.013  -0.163  -13.1 |  -0.180 |  -0.121 | buys  -0.146 sells  -0.180
+5m  all hours         engulfing, gap stop, 2R                       3811  33.7%  -0.002  -0.082   -3.5 |  -0.136 |   0.047 | buys  -0.032 sells  -0.137
+5m  all hours         engulfing, candle stop, 2R                    5013  33.3%  -0.010  -0.151   -7.4 |  -0.188 |  -0.058 | buys  -0.117 sells  -0.188
+5m  all hours         pin bar, gap stop, 2R                         5091  33.3%  -0.012  -0.118   -5.9 |  -0.151 |  -0.042 | buys  -0.072 sells  -0.174
+5m  all hours         pin bar, candle stop, 2R                      6561  32.8%  -0.026  -0.191  -10.7 |  -0.233 |  -0.089 | buys  -0.156 sells  -0.232
+5m  all hours         rejection close, gap stop, 2R                 7321  32.6%  -0.036  -0.119   -7.1 |  -0.136 |  -0.082 | buys  -0.093 sells  -0.149
+5m  all hours         rejection close, candle stop, 2R             11392  33.2%  -0.014  -0.166  -12.3 |  -0.191 |  -0.109 | buys  -0.160 sells  -0.172
+5m  all hours         any of the three, gap stop, 2R                8103  32.6%  -0.034  -0.126   -7.9 |  -0.140 |  -0.094 | buys  -0.097 sells  -0.159
+5m  all hours         any of the three, candle stop, 2R            12237  33.2%  -0.012  -0.165  -12.8 |  -0.195 |  -0.099 | buys  -0.152 sells  -0.180
+5m  all hours         any, with the trend, gap stop, 2R             6952  32.9%  -0.028  -0.120   -7.0 |  -0.141 |  -0.070 | buys  -0.089 sells  -0.155
+5m  all hours         any, with the trend, candle stop, 2R          9708  33.3%  -0.008  -0.162  -11.1 |  -0.194 |  -0.087 | buys  -0.153 sells  -0.171
+5m  all hours         no confirmation, gap stop, 3R                10372  25.2%  -0.006  -0.151   -8.8 |  -0.159 |  -0.132 | buys  -0.126 sells  -0.177
+5m  all hours         engulfing, gap stop, 3R                       3266  25.8%   0.008  -0.072   -2.3 |  -0.127 |   0.063 | buys  -0.003 sells  -0.146
+5m  all hours         engulfing, candle stop, 3R                    4568  26.0%   0.028  -0.111   -4.2 |  -0.161 |   0.009 | buys  -0.056 sells  -0.172
+5m  all hours         pin bar, gap stop, 3R                         4356  25.2%  -0.010  -0.115   -4.3 |  -0.165 |   0.003 | buys  -0.066 sells  -0.175
+5m  all hours         pin bar, candle stop, 3R                      6133  24.7%  -0.027  -0.191   -8.5 |  -0.225 |  -0.109 | buys  -0.145 sells  -0.245
+5m  all hours         rejection close, gap stop, 3R                 5760  24.9%  -0.027  -0.110   -4.7 |  -0.123 |  -0.080 | buys  -0.070 sells  -0.154
+5m  all hours         rejection close, candle stop, 3R              9695  25.2%  -0.005  -0.153   -8.5 |  -0.177 |  -0.100 | buys  -0.143 sells  -0.164
+5m  all hours         any of the three, gap stop, 3R                6300  24.6%  -0.038  -0.129   -5.8 |  -0.147 |  -0.087 | buys  -0.088 sells  -0.174
+5m  all hours         any of the three, candle stop, 3R            10372  24.8%  -0.021  -0.170   -9.9 |  -0.193 |  -0.120 | buys  -0.145 sells  -0.198
+5m  all hours         any, with the trend, gap stop, 3R             5577  25.1%  -0.019  -0.109   -4.6 |  -0.139 |  -0.041 | buys  -0.077 sells  -0.146
+5m  all hours         any, with the trend, candle stop, 3R          8565  25.0%  -0.013  -0.164   -8.6 |  -0.188 |  -0.110 | buys  -0.140 sells  -0.192
+5m  London + New York no confirmation, gap stop, 1R                 9326  48.5%  -0.033  -0.177  -16.7 |  -0.194 |  -0.135 | buys  -0.168 sells  -0.188
+5m  London + New York engulfing, gap stop, 1R                       2360  49.0%  -0.027  -0.099   -4.7 |  -0.124 |  -0.038 | buys  -0.102 sells  -0.095
+5m  London + New York engulfing, candle stop, 1R                    2593  49.7%  -0.015  -0.135   -6.6 |  -0.157 |  -0.080 | buys  -0.117 sells  -0.156
+5m  London + New York pin bar, gap stop, 1R                         3042  49.3%  -0.021  -0.120   -6.5 |  -0.138 |  -0.075 | buys  -0.113 sells  -0.129
+5m  London + New York pin bar, candle stop, 1R                      3277  48.5%  -0.035  -0.175   -9.9 |  -0.191 |  -0.137 | buys  -0.157 sells  -0.198
+5m  London + New York rejection close, gap stop, 1R                 5549  50.0%  -0.007  -0.088   -6.4 |  -0.095 |  -0.070 | buys  -0.099 sells  -0.075
+5m  London + New York rejection close, candle stop, 1R              6585  49.6%  -0.015  -0.149  -11.8 |  -0.168 |  -0.101 | buys  -0.174 sells  -0.120
+5m  London + New York any of the three, gap stop, 1R                6055  50.2%  -0.001  -0.089   -6.8 |  -0.106 |  -0.049 | buys  -0.098 sells  -0.079
+5m  London + New York any of the three, candle stop, 1R             7073  49.4%  -0.015  -0.149  -12.4 |  -0.172 |  -0.094 | buys  -0.166 sells  -0.130
+5m  London + New York any, with the trend, gap stop, 1R             4682  50.3%   0.001  -0.086   -5.8 |  -0.101 |  -0.049 | buys  -0.091 sells  -0.080
+5m  London + New York any, with the trend, candle stop, 1R          5199  49.3%  -0.019  -0.152  -10.8 |  -0.175 |  -0.095 | buys  -0.167 sells  -0.134
+5m  London + New York no confirmation, gap stop, 2R                 7562  33.2%  -0.012  -0.155   -9.4 |  -0.170 |  -0.119 | buys  -0.144 sells  -0.167
+5m  London + New York engulfing, gap stop, 2R                       2073  34.2%   0.010  -0.062   -1.9 |  -0.107 |   0.051 | buys  -0.001 sells  -0.130
+5m  London + New York engulfing, candle stop, 2R                    2446  33.9%   0.004  -0.116   -3.9 |  -0.158 |  -0.009 | buys  -0.078 sells  -0.160
+5m  London + New York pin bar, gap stop, 2R                         2736  32.4%  -0.046  -0.144   -5.2 |  -0.179 |  -0.056 | buys  -0.118 sells  -0.176
+5m  London + New York pin bar, candle stop, 2R                      3143  32.4%  -0.043  -0.183   -7.1 |  -0.213 |  -0.108 | buys  -0.153 sells  -0.220
+5m  London + New York rejection close, gap stop, 2R                 4397  33.1%  -0.025  -0.104   -4.8 |  -0.121 |  -0.063 | buys  -0.111 sells  -0.097
+5m  London + New York rejection close, candle stop, 2R              5795  33.3%  -0.013  -0.145   -7.6 |  -0.159 |  -0.112 | buys  -0.158 sells  -0.131
+5m  London + New York any of the three, gap stop, 2R                4785  32.9%  -0.030  -0.117   -5.5 |  -0.132 |  -0.078 | buys  -0.121 sells  -0.111
+5m  London + New York any of the three, candle stop, 2R             6209  33.4%  -0.008  -0.141   -7.7 |  -0.164 |  -0.088 | buys  -0.152 sells  -0.130
+5m  London + New York any, with the trend, gap stop, 2R             3949  32.6%  -0.039  -0.125   -5.4 |  -0.141 |  -0.088 | buys  -0.123 sells  -0.128
+5m  London + New York any, with the trend, candle stop, 2R          4808  33.3%  -0.013  -0.145   -7.0 |  -0.176 |  -0.069 | buys  -0.146 sells  -0.144
+5m  London + New York no confirmation, gap stop, 3R                 6444  25.3%  -0.003  -0.144   -6.6 |  -0.153 |  -0.123 | buys  -0.137 sells  -0.152
+5m  London + New York engulfing, gap stop, 3R                       1882  26.3%   0.023  -0.048   -1.2 |  -0.086 |   0.045 | buys   0.041 sells  -0.150
+5m  London + New York engulfing, candle stop, 3R                    2298  26.6%   0.051  -0.068   -1.8 |  -0.099 |   0.007 | buys   0.011 sells  -0.159
+5m  London + New York pin bar, gap stop, 3R                         2477  24.3%  -0.053  -0.151   -4.2 |  -0.198 |  -0.034 | buys  -0.117 sells  -0.192
+5m  London + New York pin bar, candle stop, 3R                      3003  23.8%  -0.071  -0.211   -6.5 |  -0.244 |  -0.130 | buys  -0.177 sells  -0.253
+5m  London + New York rejection close, gap stop, 3R                 3719  25.4%  -0.012  -0.090   -3.1 |  -0.106 |  -0.053 | buys  -0.072 sells  -0.112
+5m  London + New York rejection close, candle stop, 3R              5222  25.0%  -0.022  -0.153   -6.2 |  -0.159 |  -0.139 | buys  -0.166 sells  -0.139
+5m  London + New York any of the three, gap stop, 3R                4031  25.0%  -0.030  -0.116   -4.1 |  -0.144 |  -0.046 | buys  -0.104 sells  -0.130
+5m  London + New York any of the three, candle stop, 3R             5552  24.7%  -0.032  -0.163   -6.8 |  -0.170 |  -0.149 | buys  -0.168 sells  -0.158
+5m  London + New York any, with the trend, gap stop, 3R             3433  24.8%  -0.034  -0.119   -3.9 |  -0.139 |  -0.069 | buys  -0.102 sells  -0.138
+5m  London + New York any, with the trend, candle stop, 3R          4429  24.5%  -0.043  -0.174   -6.5 |  -0.189 |  -0.139 | buys  -0.164 sells  -0.186
+15m all hours         no confirmation, gap stop, 1R                 5416  48.1%  -0.045  -0.125   -9.0 |  -0.159 |  -0.048 | buys  -0.095 sells  -0.158
+15m all hours         engulfing, gap stop, 1R                       1486  51.7%   0.033  -0.010   -0.4 |   0.002 |  -0.039 | buys   0.060 sells  -0.091
+15m all hours         engulfing, candle stop, 1R                    1684  50.5%   0.009  -0.066   -2.7 |  -0.075 |  -0.045 | buys  -0.027 sells  -0.110
+15m all hours         pin bar, gap stop, 1R                         1866  48.9%  -0.029  -0.086   -3.6 |  -0.118 |  -0.010 | buys  -0.057 sells  -0.121
+15m all hours         pin bar, candle stop, 1R                      2085  47.6%  -0.057  -0.143   -6.3 |  -0.202 |   0.001 | buys  -0.114 sells  -0.176
+15m all hours         rejection close, gap stop, 1R                 3232  50.6%   0.007  -0.039   -2.2 |  -0.062 |   0.011 | buys  -0.007 sells  -0.075
+15m all hours         rejection close, candle stop, 1R              4079  49.6%  -0.011  -0.092   -5.8 |  -0.115 |  -0.044 | buys  -0.065 sells  -0.123
+15m all hours         any of the three, gap stop, 1R                3577  50.0%  -0.006  -0.057   -3.3 |  -0.079 |  -0.007 | buys  -0.023 sells  -0.095
+15m all hours         any of the three, candle stop, 1R             4411  49.4%  -0.017  -0.098   -6.5 |  -0.120 |  -0.050 | buys  -0.065 sells  -0.136
+15m all hours         any, with the trend, gap stop, 1R             2946  49.2%  -0.023  -0.073   -3.9 |  -0.096 |  -0.021 | buys  -0.029 sells  -0.126
+15m all hours         any, with the trend, candle stop, 1R          3398  49.3%  -0.017  -0.098   -5.6 |  -0.129 |  -0.029 | buys  -0.062 sells  -0.141
+15m all hours         no confirmation, gap stop, 2R                 4056  33.4%  -0.007  -0.085   -3.8 |  -0.127 |   0.012 | buys  -0.072 sells  -0.100
+15m all hours         engulfing, gap stop, 2R                       1246  33.1%  -0.009  -0.051   -1.3 |  -0.026 |  -0.111 | buys   0.062 sells  -0.173
+15m all hours         engulfing, candle stop, 2R                    1555  33.7%   0.005  -0.069   -1.9 |  -0.083 |  -0.038 | buys  -0.002 sells  -0.146
+15m all hours         pin bar, gap stop, 2R                         1588  32.7%  -0.031  -0.087   -2.4 |  -0.130 |   0.015 | buys  -0.029 sells  -0.154
+15m all hours         pin bar, candle stop, 2R                      1959  31.6%  -0.064  -0.150   -4.6 |  -0.205 |  -0.018 | buys  -0.131 sells  -0.172
+15m all hours         rejection close, gap stop, 2R                 2310  34.2%   0.015  -0.029   -1.0 |  -0.050 |   0.018 | buys   0.029 sells  -0.095
+15m all hours         rejection close, candle stop, 2R              3457  33.4%  -0.011  -0.089   -3.7 |  -0.123 |  -0.018 | buys  -0.045 sells  -0.140
+15m all hours         any of the three, gap stop, 2R                2506  34.0%   0.011  -0.038   -1.3 |  -0.075 |   0.049 | buys   0.014 sells  -0.097
+15m all hours         any of the three, candle stop, 2R             3712  33.2%  -0.018  -0.098   -4.1 |  -0.122 |  -0.045 | buys  -0.062 sells  -0.139
+15m all hours         any, with the trend, gap stop, 2R             2191  33.0%  -0.021  -0.070   -2.3 |  -0.125 |   0.059 | buys  -0.009 sells  -0.141
+15m all hours         any, with the trend, candle stop, 2R          3025  33.6%  -0.004  -0.083   -3.2 |  -0.107 |  -0.031 | buys  -0.058 sells  -0.114
+15m all hours         no confirmation, gap stop, 3R                 3135  25.8%   0.020  -0.057   -1.8 |  -0.091 |   0.024 | buys  -0.004 sells  -0.116
+15m all hours         engulfing, gap stop, 3R                       1068  25.8%   0.022  -0.020   -0.4 |  -0.018 |  -0.025 | buys   0.151 sells  -0.211
+15m all hours         engulfing, candle stop, 3R                    1438  24.9%  -0.013  -0.087   -1.9 |  -0.115 |  -0.023 | buys  -0.003 sells  -0.183
+15m all hours         pin bar, gap stop, 3R                         1387  25.8%   0.014  -0.042   -0.9 |  -0.088 |   0.067 | buys   0.043 sells  -0.143
+15m all hours         pin bar, candle stop, 3R                      1852  24.5%  -0.034  -0.119   -2.9 |  -0.171 |   0.007 | buys  -0.055 sells  -0.194
+15m all hours         rejection close, gap stop, 3R                 1783  27.1%   0.064   0.019    0.4 |   0.014 |   0.029 | buys   0.108 sells  -0.086
+15m all hours         rejection close, candle stop, 3R              2995  25.4%  -0.000  -0.080   -2.5 |  -0.112 |  -0.011 | buys  -0.016 sells  -0.153
+15m all hours         any of the three, gap stop, 3R                1882  27.9%   0.098   0.050    1.2 |   0.018 |   0.127 | buys   0.132 sells  -0.045
+15m all hours         any of the three, candle stop, 3R             3224  25.4%  -0.003  -0.082   -2.7 |  -0.105 |  -0.032 | buys  -0.028 sells  -0.145
+15m all hours         any, with the trend, gap stop, 3R             1728  26.6%   0.044  -0.004   -0.1 |  -0.068 |   0.153 | buys   0.089 sells  -0.114
+15m all hours         any, with the trend, candle stop, 3R          2694  25.3%  -0.000  -0.079   -2.3 |  -0.104 |  -0.023 | buys  -0.034 sells  -0.134
+15m London + New York no confirmation, gap stop, 1R                 3150  47.7%  -0.051  -0.136   -7.5 |  -0.168 |  -0.053 | buys  -0.112 sells  -0.163
+15m London + New York engulfing, gap stop, 1R                        810  53.6%   0.070   0.027    0.8 |   0.034 |   0.005 | buys   0.094 sells  -0.050
+15m London + New York engulfing, candle stop, 1R                     862  52.0%   0.039  -0.032   -0.9 |  -0.035 |  -0.025 | buys   0.007 sells  -0.078
+15m London + New York pin bar, gap stop, 1R                         1031  48.6%  -0.035  -0.094   -2.9 |  -0.125 |  -0.014 | buys  -0.089 sells  -0.099
+15m London + New York pin bar, candle stop, 1R                      1085  47.7%  -0.053  -0.133   -4.3 |  -0.180 |  -0.012 | buys  -0.113 sells  -0.160
+15m London + New York rejection close, gap stop, 1R                 1903  50.1%  -0.002  -0.049   -2.1 |  -0.072 |   0.007 | buys  -0.018 sells  -0.085
+15m London + New York rejection close, candle stop, 1R              2169  49.4%  -0.017  -0.093   -4.3 |  -0.112 |  -0.048 | buys  -0.071 sells  -0.121
+15m London + New York any of the three, gap stop, 1R                2101  49.4%  -0.018  -0.070   -3.2 |  -0.093 |  -0.011 | buys  -0.038 sells  -0.108
+15m London + New York any of the three, candle stop, 1R             2336  49.4%  -0.018  -0.095   -4.5 |  -0.107 |  -0.064 | buys  -0.061 sells  -0.135
+15m London + New York any, with the trend, gap stop, 1R             1714  48.7%  -0.034  -0.085   -3.5 |  -0.101 |  -0.046 | buys  -0.045 sells  -0.135
+15m London + New York any, with the trend, candle stop, 1R          1843  49.0%  -0.025  -0.103   -4.4 |  -0.113 |  -0.076 | buys  -0.060 sells  -0.157
+15m London + New York no confirmation, gap stop, 2R                 2585  33.2%  -0.013  -0.095   -3.4 |  -0.128 |  -0.009 | buys  -0.094 sells  -0.097
+15m London + New York engulfing, gap stop, 2R                        730  33.2%  -0.011  -0.055   -1.0 |  -0.048 |  -0.073 | buys   0.051 sells  -0.172
+15m London + New York engulfing, candle stop, 2R                     821  34.1%   0.022  -0.049   -1.0 |  -0.084 |   0.047 | buys   0.015 sells  -0.123
+15m London + New York pin bar, gap stop, 2R                          935  32.8%  -0.027  -0.085   -1.8 |  -0.129 |   0.026 | buys  -0.063 sells  -0.113
+15m London + New York pin bar, candle stop, 2R                      1039  31.0%  -0.082  -0.162   -3.7 |  -0.203 |  -0.055 | buys  -0.141 sells  -0.189
+15m London + New York rejection close, gap stop, 2R                 1513  33.6%  -0.003  -0.049   -1.3 |  -0.055 |  -0.035 | buys   0.010 sells  -0.116
+15m London + New York rejection close, candle stop, 2R              1953  33.2%  -0.015  -0.091   -2.8 |  -0.118 |  -0.026 | buys  -0.066 sells  -0.120
+15m London + New York any of the three, gap stop, 2R                1692  33.3%  -0.012  -0.063   -1.8 |  -0.080 |  -0.018 | buys  -0.026 sells  -0.105
+15m London + New York any of the three, candle stop, 2R             2094  32.5%  -0.039  -0.115   -3.7 |  -0.118 |  -0.107 | buys  -0.092 sells  -0.142
+15m London + New York any, with the trend, gap stop, 2R             1443  32.2%  -0.048  -0.099   -2.6 |  -0.121 |  -0.041 | buys  -0.060 sells  -0.146
+15m London + New York any, with the trend, candle stop, 2R          1712  33.5%  -0.007  -0.084   -2.4 |  -0.080 |  -0.092 | buys  -0.064 sells  -0.108
+15m London + New York no confirmation, gap stop, 3R                 2201  25.4%  -0.001  -0.084   -2.3 |  -0.107 |  -0.021 | buys  -0.043 sells  -0.129
+15m London + New York engulfing, gap stop, 3R                        671  26.7%   0.053   0.010    0.2 |   0.011 |   0.008 | buys   0.149 sells  -0.151
+15m London + New York engulfing, candle stop, 3R                     777  24.3%  -0.033  -0.103   -1.7 |  -0.163 |   0.057 | buys   0.004 sells  -0.226
+15m London + New York pin bar, gap stop, 3R                          873  25.5%   0.002  -0.056   -0.9 |  -0.103 |   0.064 | buys  -0.005 sells  -0.119
+15m London + New York pin bar, candle stop, 3R                      1000  24.5%  -0.035  -0.115   -2.1 |  -0.173 |   0.035 | buys  -0.044 sells  -0.207
+15m London + New York rejection close, gap stop, 3R                 1294  27.5%   0.079   0.032    0.6 |   0.034 |   0.029 | buys   0.112 sells  -0.058
+15m London + New York rejection close, candle stop, 3R              1763  24.7%  -0.028  -0.104   -2.5 |  -0.121 |  -0.061 | buys  -0.047 sells  -0.170
+15m London + New York any of the three, gap stop, 3R                1432  27.4%   0.077   0.026    0.6 |   0.015 |   0.057 | buys   0.106 sells  -0.066
+15m London + New York any of the three, candle stop, 3R             1895  24.6%  -0.034  -0.110   -2.7 |  -0.099 |  -0.138 | buys  -0.054 sells  -0.176
+15m London + New York any, with the trend, gap stop, 3R             1255  26.5%   0.039  -0.011   -0.2 |  -0.035 |   0.053 | buys   0.062 sells  -0.101
+15m London + New York any, with the trend, candle stop, 3R          1579  24.5%  -0.036  -0.113   -2.6 |  -0.097 |  -0.152 | buys  -0.061 sells  -0.177
+1h  all hours         no confirmation, gap stop, 1R                 1293  49.9%  -0.006  -0.042   -1.5 |  -0.052 |  -0.018 | buys  -0.015 sells  -0.070
+1h  all hours         engulfing, gap stop, 1R                        366  48.6%  -0.033  -0.054   -1.0 |  -0.059 |  -0.043 | buys  -0.068 sells  -0.034
+1h  all hours         engulfing, candle stop, 1R                     396  50.5%   0.002  -0.035   -0.7 |  -0.092 |   0.113 | buys  -0.039 sells  -0.031
+1h  all hours         pin bar, gap stop, 1R                          458  51.5%   0.028   0.001    0.0 |  -0.011 |   0.030 | buys   0.052 sells  -0.061
+1h  all hours         pin bar, candle stop, 1R                       492  53.3%   0.062   0.020    0.4 |  -0.001 |   0.066 | buys   0.042 sells  -0.008
+1h  all hours         rejection close, gap stop, 1R                  806  48.9%  -0.025  -0.047   -1.3 |  -0.040 |  -0.062 | buys  -0.027 sells  -0.071
+1h  all hours         rejection close, candle stop, 1R               991  49.9%  -0.007  -0.046   -1.4 |  -0.053 |  -0.030 | buys  -0.007 sells  -0.090
+1h  all hours         any of the three, gap stop, 1R                 886  49.3%  -0.017  -0.041   -1.2 |  -0.036 |  -0.052 | buys  -0.015 sells  -0.072
+1h  all hours         any of the three, candle stop, 1R             1073  50.1%  -0.002  -0.041   -1.3 |  -0.064 |   0.009 | buys   0.008 sells  -0.097
+1h  all hours         any, with the trend, gap stop, 1R              714  49.3%  -0.016  -0.039   -1.0 |  -0.034 |  -0.051 | buys  -0.025 sells  -0.057
+1h  all hours         any, with the trend, candle stop, 1R           830  50.0%  -0.005  -0.044   -1.3 |  -0.059 |  -0.011 | buys  -0.019 sells  -0.074
+1h  all hours         no confirmation, gap stop, 2R                 1018  34.5%   0.031  -0.005   -0.1 |   0.012 |  -0.044 | buys   0.053 sells  -0.063
+1h  all hours         engulfing, gap stop, 2R                        304  34.9%   0.042   0.021    0.3 |   0.084 |  -0.125 | buys   0.104 sells  -0.104
+1h  all hours         engulfing, candle stop, 2R                     361  34.6%   0.022  -0.015   -0.2 |   0.034 |  -0.145 | buys  -0.046 sells   0.029
+1h  all hours         pin bar, gap stop, 2R                          394  36.3%   0.084   0.057    0.8 |   0.116 |  -0.089 | buys   0.150 sells  -0.061
+1h  all hours         pin bar, candle stop, 2R                       470  36.2%   0.082   0.040    0.6 |   0.020 |   0.085 | buys   0.126 sells  -0.069
+1h  all hours         rejection close, gap stop, 2R                  590  35.4%   0.060   0.038    0.6 |   0.072 |  -0.037 | buys   0.094 sells  -0.026
+1h  all hours         rejection close, candle stop, 2R               847  32.9%  -0.020  -0.058   -1.2 |  -0.024 |  -0.129 | buys   0.010 sells  -0.138
+1h  all hours         any of the three, gap stop, 2R                 654  34.4%   0.028   0.005    0.1 |   0.059 |  -0.113 | buys   0.056 sells  -0.056
+1h  all hours         any of the three, candle stop, 2R              920  33.3%  -0.009  -0.047   -1.0 |  -0.035 |  -0.075 | buys   0.026 sells  -0.134
+1h  all hours         any, with the trend, gap stop, 2R              541  34.6%   0.036   0.013    0.2 |   0.094 |  -0.149 | buys   0.083 sells  -0.071
+1h  all hours         any, with the trend, candle stop, 2R           737  33.4%  -0.005  -0.043   -0.8 |  -0.019 |  -0.092 | buys  -0.004 sells  -0.092
+1h  all hours         no confirmation, gap stop, 3R                  790  27.8%   0.110   0.075    1.2 |   0.068 |   0.090 | buys   0.194 sells  -0.054
+1h  all hours         engulfing, gap stop, 3R                        270  28.9%   0.151   0.131    1.2 |   0.173 |   0.025 | buys   0.240 sells  -0.031
+1h  all hours         engulfing, candle stop, 3R                     342  26.9%   0.056   0.018    0.2 |   0.056 |  -0.076 | buys   0.053 sells  -0.033
+1h  all hours         pin bar, gap stop, 3R                          356  28.4%   0.130   0.102    1.1 |   0.111 |   0.078 | buys   0.267 sells  -0.109
+1h  all hours         pin bar, candle stop, 3R                       447  27.5%   0.097   0.055    0.6 |   0.052 |   0.061 | buys   0.217 sells  -0.145
+1h  all hours         rejection close, gap stop, 3R                  477  27.7%   0.103   0.082    1.0 |   0.068 |   0.112 | buys   0.171 sells  -0.022
+1h  all hours         rejection close, candle stop, 3R               732  26.5%   0.050   0.012    0.2 |   0.015 |   0.007 | buys   0.127 sells  -0.120
+1h  all hours         any of the three, gap stop, 3R                 524  27.9%   0.110   0.087    1.1 |   0.116 |   0.030 | buys   0.166 sells  -0.009
+1h  all hours         any of the three, candle stop, 3R              791  26.7%   0.059   0.020    0.3 |   0.019 |   0.024 | buys   0.148 sells  -0.126
+1h  all hours         any, with the trend, gap stop, 3R              451  27.3%   0.090   0.068    0.8 |   0.095 |   0.017 | buys   0.234 sells  -0.135
+1h  all hours         any, with the trend, candle stop, 3R           656  26.4%   0.046   0.008    0.1 |   0.016 |  -0.008 | buys   0.097 sells  -0.102
+1h  London + New York no confirmation, gap stop, 1R                  754  49.9%  -0.003  -0.041   -1.1 |  -0.028 |  -0.072 | buys  -0.040 sells  -0.042
+1h  London + New York engulfing, gap stop, 1R                        199  47.2%  -0.064  -0.085   -1.2 |  -0.076 |  -0.113 | buys  -0.170 sells   0.041
+1h  London + New York engulfing, candle stop, 1R                     202  48.0%  -0.053  -0.087   -1.2 |  -0.188 |   0.214 | buys  -0.189 sells   0.066
+1h  London + New York pin bar, gap stop, 1R                          232  50.9%   0.016  -0.010   -0.1 |   0.019 |  -0.074 | buys  -0.004 sells  -0.018
+1h  London + New York pin bar, candle stop, 1R                       246  53.3%   0.063   0.025    0.4 |   0.007 |   0.068 | buys  -0.006 sells   0.070
+1h  London + New York rejection close, gap stop, 1R                  466  50.4%   0.004  -0.018   -0.4 |  -0.019 |  -0.014 | buys  -0.042 sells   0.011
+1h  London + New York rejection close, candle stop, 1R               515  50.9%   0.007  -0.029   -0.6 |  -0.068 |   0.075 | buys  -0.057 sells   0.005
+1h  London + New York any of the three, gap stop, 1R                 503  49.9%  -0.005  -0.028   -0.6 |  -0.016 |  -0.057 | buys  -0.049 sells  -0.001
+1h  London + New York any of the three, candle stop, 1R              554  50.4%   0.000  -0.035   -0.8 |  -0.072 |   0.058 | buys  -0.059 sells  -0.004
+1h  London + New York any, with the trend, gap stop, 1R              387  48.3%  -0.037  -0.060   -1.2 |  -0.042 |  -0.101 | buys  -0.097 sells  -0.010
+1h  London + New York any, with the trend, candle stop, 1R           420  50.7%   0.007  -0.028   -0.6 |  -0.070 |   0.073 | buys  -0.072 sells   0.032
+1h  London + New York no confirmation, gap stop, 2R                  657  36.2%   0.086   0.049    0.9 |   0.052 |   0.041 | buys   0.080 sells   0.013
+1h  London + New York engulfing, gap stop, 2R                        179  33.0%  -0.027  -0.048   -0.5 |  -0.022 |  -0.124 | buys  -0.094 sells   0.020
+1h  London + New York engulfing, candle stop, 2R                     191  31.4%  -0.084  -0.117   -1.1 |  -0.072 |  -0.250 | buys  -0.188 sells  -0.009
+1h  London + New York pin bar, gap stop, 2R                          219  37.4%   0.122   0.096    1.0 |   0.137 |  -0.002 | buys   0.136 sells   0.038
+1h  London + New York pin bar, candle stop, 2R                       239  37.2%   0.115   0.077    0.8 |   0.056 |   0.125 | buys   0.072 sells   0.086
+1h  London + New York rejection close, gap stop, 2R                  393  35.4%   0.055   0.034    0.5 |   0.056 |  -0.024 | buys   0.001 sells   0.074
+1h  London + New York rejection close, candle stop, 2R               470  34.0%   0.005  -0.030   -0.5 |  -0.050 |   0.023 | buys  -0.008 sells  -0.057
+1h  London + New York any of the three, gap stop, 2R                 426  35.7%   0.067   0.044    0.6 |   0.082 |  -0.048 | buys   0.021 sells   0.074
+1h  London + New York any of the three, candle stop, 2R              511  34.4%   0.021  -0.014   -0.2 |  -0.037 |   0.043 | buys   0.008 sells  -0.042
+1h  London + New York any, with the trend, gap stop, 2R              342  35.4%   0.057   0.035    0.5 |   0.078 |  -0.063 | buys   0.026 sells   0.048
+1h  London + New York any, with the trend, candle stop, 2R           393  34.9%   0.032  -0.002   -0.0 |  -0.026 |   0.052 | buys  -0.018 sells   0.019
+1h  London + New York no confirmation, gap stop, 3R                  546  28.4%   0.135   0.098    1.3 |   0.076 |   0.154 | buys   0.194 sells  -0.007
+1h  London + New York engulfing, gap stop, 3R                        167  26.9%   0.055   0.034    0.3 |   0.090 |  -0.132 | buys   0.033 sells   0.036
+1h  London + New York engulfing, candle stop, 3R                     185  25.9%   0.005  -0.027   -0.2 |   0.021 |  -0.167 | buys  -0.076 sells   0.046
+1h  London + New York pin bar, gap stop, 3R                          206  28.6%   0.144   0.118    0.9 |   0.044 |   0.294 | buys   0.159 sells   0.063
+1h  London + New York pin bar, candle stop, 3R                       234  29.1%   0.160   0.123    1.0 |   0.083 |   0.214 | buys   0.123 sells   0.122
+1h  London + New York rejection close, gap stop, 3R                  345  27.5%   0.095   0.073    0.8 |   0.034 |   0.177 | buys   0.149 sells  -0.016
+1h  London + New York rejection close, candle stop, 3R               433  28.2%   0.107   0.072    0.8 |   0.059 |   0.108 | buys   0.084 sells   0.059
+1h  London + New York any of the three, gap stop, 3R                 375  27.5%   0.095   0.072    0.8 |   0.060 |   0.102 | buys   0.106 sells   0.027
+1h  London + New York any of the three, candle stop, 3R              469  28.1%   0.111   0.076    0.9 |   0.066 |   0.100 | buys   0.088 sells   0.060
+1h  London + New York any, with the trend, gap stop, 3R              315  27.3%   0.088   0.066    0.7 |   0.103 |  -0.015 | buys   0.138 sells  -0.037
+1h  London + New York any, with the trend, candle stop, 3R           367  27.2%   0.072   0.038    0.4 |   0.018 |   0.086 | buys   0.007 sells   0.082
+
+===== PICKED ON THE FIRST 70%, JUDGED ON THE UNSEEN LAST 30% (198 rules tried) =====
+Profitable after spread on the first 70%: 45. On the last 30%: 63. On both: 27. Both buys and sells profitable overall: 13. Overall t above 3.5: 0.
+
+1h all hours, engulfing, gap stop, 3R
+  first 70%: 0.173R (t 1.3, n 193, win 30.1%)
+  UNSEEN 30%: 0.025R (t 0.1, n 77, win 26.0%); buys 0.195R (n 43), sells -0.190R (n 34)
+  all data: buys 0.240R (t 1.6, n 161), sells -0.031R (t -0.2, n 109)
+  controls after spread: shuffled candles 0.032R (n 1645); random entries same directions -0.030R
+
+1h London + New York, pin bar, gap stop, 2R
+  first 70%: 0.137R (t 1.2, n 154, win 39.0%)
+  UNSEEN 30%: -0.002R (t -0.0, n 65, win 33.8%); buys -0.043R (n 40), sells 0.063R (n 25)
+  all data: buys 0.136R (t 1.0, n 129), sells 0.038R (t 0.3, n 90)
+  controls after spread: shuffled candles -0.017R (n 1308); random entries same directions -0.010R
+
+1h all hours, any of the three, gap stop, 3R
+  first 70%: 0.116R (t 1.2, n 348, win 28.7%)
+  UNSEEN 30%: 0.030R (t 0.2, n 176, win 26.1%); buys 0.110R (n 103), sells -0.083R (n 73)
+  all data: buys 0.166R (t 1.5, n 288), sells -0.009R (t -0.1, n 236)
+  controls after spread: shuffled candles 0.008R (n 2115); random entries same directions 0.001R
+
+1h all hours, pin bar, gap stop, 2R
+  first 70%: 0.116R (t 1.3, n 281, win 38.4%)
+  UNSEEN 30%: -0.089R (t -0.7, n 113, win 31.0%); buys -0.034R (n 67), sells -0.169R (n 46)
+  all data: buys 0.150R (t 1.5, n 221), sells -0.061R (t -0.6, n 173)
+  controls after spread: shuffled candles -0.006R (n 2220); random entries same directions 0.036R
+
+1h all hours, pin bar, gap stop, 3R
+  first 70%: 0.111R (t 1.0, n 261, win 28.7%)
+  UNSEEN 30%: 0.078R (t 0.4, n 95, win 27.4%); buys 0.146R (n 55), sells -0.016R (n 40)
+  all data: buys 0.267R (t 2.0, n 200), sells -0.109R (t -0.8, n 156)
+  controls after spread: shuffled candles 0.008R (n 1812); random entries same directions -0.048R
+
+1h London + New York, any, with the trend, gap stop, 3R
+  first 70%: 0.103R (t 0.8, n 215, win 28.4%)
+  UNSEEN 30%: -0.015R (t -0.1, n 100, win 25.0%); buys -0.016R (n 64), sells -0.012R (n 36)
+  all data: buys 0.138R (t 1.0, n 185), sells -0.037R (t -0.2, n 130)
+  controls after spread: shuffled candles 0.048R (n 1523); random entries same directions 0.068R
+
+1h all hours, any, with the trend, gap stop, 3R
+  first 70%: 0.095R (t 0.9, n 292, win 28.1%)
+  UNSEEN 30%: 0.017R (t 0.1, n 159, win 25.8%); buys 0.167R (n 88), sells -0.169R (n 71)
+  all data: buys 0.234R (t 2.0, n 248), sells -0.135R (t -1.2, n 203)
+  controls after spread: shuffled candles -0.004R (n 1979); random entries same directions 0.001R
+
+1h all hours, any, with the trend, gap stop, 2R
+  first 70%: 0.094R (t 1.2, n 361, win 37.4%)
+  UNSEEN 30%: -0.149R (t -1.5, n 180, win 28.9%); buys -0.088R (n 100), sells -0.227R (n 80)
+  all data: buys 0.083R (t 1.0, n 295), sells -0.071R (t -0.8, n 246)
+  controls after spread: shuffled candles -0.051R (n 2576); random entries same directions -0.023R

@@ -41,6 +41,48 @@ read by anyone. To add another provider, write a class with `connect()`, `candle
 
 Signals use **closed candles only**. The live stream only redraws the chart and triggers a re-run when a candle closes.
 
+## Chart markup and alerts
+
+The Chart page draws BOS, MSS, fair value gaps, order blocks and liquidity sweeps on live candles. Tick the other
+concepts above the chart: IFVG, breaker block, OTE, supply and demand, support and resistance, breakout, CRT,
+Silver Bullet and Power of 3. "KRM" is left out because no public source defines its rules.
+
+The Alerts page checks the chosen markets every 30 seconds and gives a sound, a desktop pop-up and a log entry. Zone
+touches fire while the candle is still forming; everything else fires when the candle closes. Alerts only run on live
+Deriv prices, and only while this page is open. Setups already on the chart when the page opens stay quiet.
+
+These definitions are in `js/core/smart-money.js`. None of them come from an official rulebook, and an alert is not
+evidence that a trade will work. See `research/fvg-return/REPORT.md` for what testing found.
+
+## Potential trades
+
+The Chart page draws the buy or sell, stop and take profit for the market on screen, with a card showing the rule's
+backtest result. "Hide trade" removes them. The Trades page lists every market, plus the gold trend rule.
+
+A setup needs the 1H and 4H trends to agree, a 15-minute order block or FVG at or within one average candle of the
+price, a sweep or MSS in the last 16 candles, and at least 1R of reward. The stop is half an average candle past the
+zone and the take profit is the last 24 hours' high or low. The rule is in `js/core/potential-trade.js`.
+
+`research/potential-trade/backtest.mjs` runs that same code through history. **The rule lost money after spread on all
+11 markets tested**, with no clear gain over shuffled candles, so a potential trade is not a recommendation. Forex and
+the other markets without a figure have not been tested. If the rule changes, run the backtest again and update
+`js/core/potential-trade-backtest.js`.
+
+Deriv's public `app_id` 1089 refuses live streaming, so the chart polls for the newest candle every 10 seconds. A
+registered app id would use streaming automatically.
+
+## Phone alerts (Telegram)
+
+`alerts/telegram-watcher.mjs` runs the same alert rules without a browser, as a background service, and sends setups to
+Telegram. It needs this computer switched on and online.
+
+1. In Telegram, message `@BotFather`, send `/newbot` and copy the token.
+2. In a terminal, run `node alerts/telegram-setup.mjs`, paste the token, then message your bot once.
+
+The token goes in `~/.credentials/all-projects.env`, never in this project. Choose markets, timeframe and setups in
+`alerts/telegram-alerts.json`; changes apply within 30 seconds. To test without sending, add `--dry-run` to the watcher.
+Service commands: `systemctl --user status strategy-desk-telegram`, `journalctl --user -u strategy-desk-telegram`.
+
 ## Layout
 
 ```
@@ -52,14 +94,22 @@ js/core/      strategy engine, independent of the page (also runs in Node)
   performance.js win rate, profit factor, drawdown, equity
   position-size.js
 js/data/      Deriv, demo and CSV feeds
-js/ui/        views: dashboard, chart, calculator, checklist, journal, analytics, backtest, rules, settings
+js/ui/        views: dashboard, chart, alerts, trades, calculator, checklist, journal, analytics, backtest, rules, settings
 tests/        engine.test.mjs (Node), e2e.mjs (Playwright walk-through)
 ```
+
+## Trained model
+
+The dashboard also shows a machine-learning model trained on 10 years of hourly prices, with how it tested.
+Training, results and the parity check are in [`ml/README.md`](ml/README.md).
 
 ## Tests
 
 ```bash
 node tests/engine.test.mjs                       # includes a no-look-ahead check
+node tests/smart-money.test.mjs                  # markup detectors, alert watcher, no-look-ahead
+node tests/telegram.test.mjs                     # phone alerts, with a fake Telegram
+node tests/potential-trade.test.mjs              # potential trade levels and backtest wording
 python3 -m http.server 8765 & node tests/e2e.mjs # clicks every view; fails on console errors or sideways scroll
 ```
 

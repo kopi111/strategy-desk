@@ -468,3 +468,99 @@ details.collapse[open] summary::before { content: '−'; }
 @media (max-width: 560px) {
   .ml-reading, .ml-tests { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Smart-money markup toggles above the chart, and the Alerts page. */
+.markup-toggles { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-bottom: 12px; font-size: 12px; font-weight: 600; }
+.alert-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.alert-note { font-size: 12px; margin: 12px 0 0; }
+.check-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 14px; }
+.concept-list { display: grid; gap: 10px; }
+.concept-row { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.concept-row input { margin-top: 3px; flex: none; }
+.concept-row strong { display: block; font-size: 13px; }
+.concept-row small { display: block; font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+/* ---------- Deriv-style chart page: the white theme applies only while the chart page is open ---------- */
+body[data-page="chart"] {
+  --bg: #ffffff; --bg-raised: #f8f9fd; --panel: #ffffff; --panel-2: #f8f9fd; --panel-3: #eef1f8;
+  --border: #e0e3eb; --border-strong: #d1d4dc; --text: #131722; --text-soft: #434651; --muted: #6a6d78; --faint: #9598a1;
+  --bull: #089981; --bull-soft: rgba(8, 153, 129, 0.1); --bear: #f23645; --bear-soft: rgba(242, 54, 69, 0.1);
+  --wait: #b26a00; --wait-soft: rgba(178, 106, 0, 0.1); --accent: #2962ff; --accent-strong: #1e53e5; --accent-soft: rgba(41, 98, 255, 0.1);
+  background: var(--bg); color: var(--text);
+}
+body[data-page="chart"] .topbar { background: rgba(255, 255, 255, 0.92); }
+body[data-page="chart"] .sidebar { background: #ffffff; border-right: 1px solid var(--border); }
+body[data-page="chart"] .brand-text, body[data-page="chart"] .brand-text strong { color: var(--text); }
+body[data-page="chart"] .nav-item { color: var(--text-soft); }
+body[data-page="chart"] .nav-item:hover { background: var(--panel-3); color: var(--text); }
+body[data-page="chart"] .source-card { background: var(--bg-raised); }
+body[data-page="chart"] .panel { background: var(--panel); box-shadow: none; }
+body[data-page="chart"] .nav-item[aria-current="page"] { color: var(--accent); }
+body[data-page="chart"] .segmented button[aria-checked="true"] { color: var(--accent); background: var(--accent-soft); box-shadow: none; }
+body[data-page="chart"] .chart-loading { background: rgba(255, 255, 255, 0.7); }
+body[data-page="chart"] .toast { color: var(--text); }
+.deriv-chart { border: 1px solid var(--border); background: var(--panel); }
+.deriv-top { display: flex; align-items: center; gap: 10px 18px; flex-wrap: wrap; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.deriv-top .markup-toggles { margin: 0; }
+.deriv-top .toggle input { width: 26px; height: 14px; }
+.deriv-top .toggle input::after { width: 10px; height: 10px; }
+.deriv-top .toggle input:checked::after { transform: translateX(12px); }
+.deriv-body { display: flex; }
+.deriv-body .chart-box { flex: 1; min-width: 0; height: max(460px, calc(100vh - 345px)); border: 0; border-radius: 0; background: #ffffff; }
+.tool-rail { flex: none; width: 46px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 0; border-right: 1px solid var(--border); }
+.tool-button { width: 34px; height: 34px; display: grid; place-items: center; border: 0; border-radius: 6px; background: none; color: var(--text); cursor: pointer; }
+.tool-button svg { width: 21px; height: 21px; }
+.tool-button:hover { background: var(--panel-3); }
+.tool-button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); }
+.chart-legend { font-family: var(--font); }
+.chart-legend i { font-style: normal; color: var(--muted); margin-right: 2px; }
+.legend-up { color: var(--bull); }
+.legend-down { color: var(--bear); }
+.deriv-bottom { display: flex; align-items: center; gap: 4px 6px; flex-wrap: wrap; padding: 6px 10px; border-top: 1px solid var(--border); font-size: 12.5px; }
+.deriv-bottom .spacer { flex: 1; }
+.range-buttons { display: flex; gap: 2px; }
+.range-buttons button, .range-link, .scale-button { border: 0; border-radius: 4px; background: none; color: var(--text-soft); font: inherit; padding: 4px 8px; cursor: pointer; }
+.range-buttons button:hover, .range-link:hover, .scale-button:hover { background: var(--panel-3); }
+.scale-button[aria-pressed="true"] { background: var(--panel-3); color: var(--accent); }
+.deriv-clock { color: var(--text-soft); margin-right: 8px; }
+.chart-panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; align-items: start; margin-top: 16px; }
+@media (max-width: 620px) {
+  .tool-rail { width: 38px; }
+  .tool-button { width: 30px; height: 30px; }
+  .chart-panels { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The hide buttons: the sidebar at computer widths, and the section under the chart. */
+.menu-button { display: grid; }
+@media (min-width: 921px) {
+  body[data-sidebar="hidden"] .app { grid-template-columns: minmax(0, 1fr); }
+  body[data-sidebar="hidden"] .sidebar { display: none; }
+}
+.view.is-chart-only .deriv-body .chart-box { height: max(460px, calc(100vh - 285px)); }
+
+/* Full view: the chart fills the browser window, covering the sidebar and top bar. Pop-up messages stay above it. */
+.full-market { display: none; }
+.view.is-full-view .full-market { display: block; flex: none; width: 190px; min-width: 0; }
+.view.is-full-view .deriv-chart { position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; border: 0; }
+.view.is-full-view .deriv-body { flex: 1; min-height: 0; }
+.view.is-full-view .deriv-body .chart-box { height: auto; }
+.view.is-full-view [data-action="toggle-details"] { display: none; }
+.toasts { z-index: 60; }
+/* The page fade-in uses a transform, which would briefly stop the fixed chart from covering the window. */
+.view.is-full-view { animation: none; }
+
+/* The potential trade card on the chart. It sits low on the left, where it covers the fewest recent candles. */
+.trade-card { position: absolute; left: 12px; bottom: 40px; z-index: 3; max-width: min(460px, calc(100% - 90px)); display: flex; flex-direction: column; gap: 3px; padding: 8px 12px; border-radius: 8px; border: 1px solid #d7dbe3; background: rgba(255, 255, 255, 0.94); color: #1b2230; font-size: 12px; pointer-events: none; }
+.trade-card[hidden] { display: none; }
+.trade-card strong { font-size: 13px; }
+.trade-card .bull { color: #059669; }
+.trade-card .bear { color: #dc2626; }
+.trade-card small { color: #5b6472; }
+.trade-card small.proof-lost { color: #b42318; }
+
+/* The Trades page. */
+.trades-note { margin-top: 10px; }
+.trades-reason { color: var(--muted); }
+.proof-lost { color: var(--bear); }
+.proof-untested { color: var(--muted); }
+.trade-open { background: none; border: 0; padding: 0; color: inherit; font: inherit; font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }

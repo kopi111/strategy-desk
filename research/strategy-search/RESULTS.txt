@@ -1,0 +1,58 @@
+===== STEP 1: FAIRNESS CHECK ON A PURE RANDOM WALK (no spread) =====
+349 rules. Average result 0.0112R (fair is 0). Highest t 3.3. Rules beating coin-flip odds with t above 3: 1.
+Average win rate on random data: 0.5R target: 66.4% (fair 66.7%) | 0.75R target: 57.5% (fair 57.1%) | 1R target: 50.7% (fair 50.0%) | 1.5R target: 41.1% (fair 40.0%)
+
+3256 rule and market-group combinations with enough trades.
+
+===== Gold: 1080 rules =====
+Win 55%+ on the first 70% (any profit): 471. Win 55%+ AND profit on the first 70%: 17. Of those, still both on the unseen 30%: 8. Profit on both parts at any win rate: 40.
+Finalists, picked on the first 70% by t-score:
+  1h  Pin bar                    stop 2 range, target 1   R, with EMA200 | first 70%: win 55.3%, 0.075R, t 1.9, n 689 | UNSEEN: win 52.0%, 0.024R, t 0.4, n 298, buys 0.065, sells -0.031
+  1h  Pin bar                    stop 2 range, target 0.75R, with EMA200 | first 70%: win 61.8%, 0.051R, t 1.6, n 765 | UNSEEN: win 57.6%, -0.007R, t -0.2, n 328, buys 0.034, sells -0.063
+  1h  Supply and demand          stop 2 range, target 1   R, with EMA200 | first 70%: win 55.2%, 0.076R, t 1.2, n 259 | UNSEEN: win 49.5%, -0.036R, t -0.4, n 99, buys -0.110, sells 0.059
+  1h  Break of structure         stop 2 range, target 0.75R | first 70%: win 60.3%, 0.029R, t 0.7, n 468 | UNSEEN: win 61.5%, 0.051R, t 0.8, n 195, buys 0.125, sells -0.049
+  1h  Break of structure         stop 2 range, target 0.75R, with EMA200 | first 70%: win 60.4%, 0.030R, t 0.6, n 356 | UNSEEN: win 63.8%, 0.089R, t 1.2, n 149, buys 0.098, sells 0.075
+  1h  Supply and demand          stop 2 range, target 0.75R, with EMA200 | first 70%: win 60.1%, 0.023R, t 0.4, n 268 | UNSEEN: win 56.2%, -0.043R, t -0.5, n 105, buys -0.076, sells 0.000
+  1h  Order block                stop 2 range, target 0.75R, with EMA200 | first 70%: win 59.5%, 0.017R, t 0.4, n 402 | UNSEEN: win 56.8%, -0.030R, t -0.4, n 155, buys -0.003, sells -0.073
+  1h  Bollinger fade             stop 2 range, target 0.75R, with EMA200 | first 70%: win 59.8%, 0.021R, t 0.4, n 234 | UNSEEN: win 62.2%, 0.076R, t 0.9, n 90, buys 0.056, sells 0.106
+
+===== Forex: 1088 rules =====
+Win 55%+ on the first 70% (any profit): 396. Win 55%+ AND profit on the first 70%: 0. Of those, still both on the unseen 30%: 0. Profit on both parts at any win rate: 1.
+Finalists, picked on the first 70% by t-score:
+
+===== Vix: 1088 rules =====
+Win 55%+ on the first 70% (any profit): 538. Win 55%+ AND profit on the first 70%: 1. Of those, still both on the unseen 30%: 0. Profit on both parts at any win rate: 1.
+Finalists, picked on the first 70% by t-score:
+  1h  Market structure shift     stop 2 range, target 0.75R | first 70%: win 59.0%, 0.003R, t 0.1, n 1951 | UNSEEN: win 56.2%, -0.047R, t -1.6, n 860, buys -0.035, sells -0.058
+
+===== STEP 4: RULES THAT WON 55%+ AND PROFITED ON BOTH PARTS, AGAINST CONTROLS =====
+8 passed.
+Gold  1h  Break of structure         stop 2 range, target 0.5 R, with EMA200 | first 69.2% 0.011R t 0.3 | unseen 74.4% 0.102R t 2.0 n 160 | markets up 1/1 | shuffled 65.9% -0.028R
+Gold  1h  Break of structure         stop 2 range, target 0.5 R | first 68.4% 0.000R t 0.0 | unseen 71.9% 0.063R t 1.3 n 210 | markets up 1/1 | shuffled 62.9% -0.073R
+Gold  1h  Break of structure         stop 2 range, target 0.75R, with EMA200 | first 60.4% 0.030R t 0.6 | unseen 63.8% 0.089R t 1.2 n 149 | markets up 1/1 | shuffled 52.5% -0.097R
+Gold  1h  Bollinger fade             stop 2 range, target 0.5 R, with EMA200 | first 68.7% 0.005R t 0.1 | unseen 72.5% 0.076R t 1.1 n 91 | markets up 1/1 | shuffled 65.4% -0.035R
+Gold  1h  Bollinger fade             stop 2 range, target 0.75R, with EMA200 | first 59.8% 0.021R t 0.4 | unseen 62.2% 0.076R t 0.9 n 90 | markets up 1/1 | shuffled 62.5% 0.078R
+Gold  1h  Break of structure         stop 2 range, target 0.75R | first 60.3% 0.029R t 0.7 | unseen 61.5% 0.051R t 0.8 n 195 | markets up 1/1 | shuffled 60.9% 0.050R
+Gold  1h  Engulfing                  stop 2 range, target 0.75R, with EMA200 | first 59.1% 0.003R t 0.1 | unseen 59.4% 0.023R t 0.5 n 308 | markets up 1/1 | shuffled 57.6% -0.009R
+Gold  1h  Liquidity sweep            stop 2 range, target 0.75R, with EMA200 | first 59.5% 0.010R t 0.2 | unseen 58.9% 0.020R t 0.3 n 151 | markets up 1/1 | shuffled 56.5% -0.027R
+
+===== GOLD 1H RULES ON OLDER PRICES (2016-01-03 to 2022-12-30, 41404 candles) =====
+1h  Break of structure         stop 2 range, target 0.5 R, with EMA200 | 2023-26: win 69.2%/74.4% 0.011/0.102R | 2016-22: win 66.8%, -0.021R, t -1.0, n 1079, buys -0.045, sells 0.011
+1h  Break of structure         stop 2 range, target 0.5 R | 2023-26: win 68.4%/71.9% 0.000/0.063R | 2016-22: win 66.7%, -0.022R, t -1.1, n 1371, buys -0.041, sells 0.001
+1h  Break of structure         stop 2 range, target 0.75R, with EMA200 | 2023-26: win 60.4%/63.8% 0.030/0.089R | 2016-22: win 56.6%, -0.032R, t -1.2, n 998, buys -0.027, sells -0.040
+1h  Bollinger fade             stop 2 range, target 0.5 R, with EMA200 | 2023-26: win 68.7%/72.5% 0.005/0.076R | 2016-22: win 67.6%, -0.009R, t -0.3, n 713, buys -0.015, sells -0.000
+1h  Bollinger fade             stop 2 range, target 0.75R, with EMA200 | 2023-26: win 59.8%/62.2% 0.021/0.076R | 2016-22: win 58.4%, -0.001R, t -0.0, n 666, buys -0.019, sells 0.022
+1h  Break of structure         stop 2 range, target 0.75R | 2023-26: win 60.3%/61.5% 0.029/0.051R | 2016-22: win 57.0%, -0.025R, t -1.0, n 1270, buys -0.025, sells -0.025
+1h  Engulfing                  stop 2 range, target 0.75R, with EMA200 | 2023-26: win 59.1%/59.4% 0.003/0.023R | 2016-22: win 56.3%, -0.038R, t -2.0, n 2110, buys -0.010, sells -0.071
+1h  Liquidity sweep            stop 2 range, target 0.75R, with EMA200 | 2023-26: win 59.5%/58.9% 0.010/0.020R | 2016-22: win 54.0%, -0.078R, t -2.8, n 1001, buys -0.089, sells -0.062
+1h  Pin bar                    stop 2 range, target 1.5 R, with EMA200 | 2023-26: win 45.5%/43.9% 0.104/0.082R | 2016-22: win 39.6%, -0.035R, t -1.1, n 1532, buys 0.006, sells -0.089
+1h  Pin bar                    stop 2 range, target 1   R, with EMA200 | 2023-26: win 55.3%/52.0% 0.075/0.024R | 2016-22: win 48.8%, -0.048R, t -2.0, n 1826, buys -0.019, sells -0.086
+1h  Break of structure         stop 2 range, target 1.5 R, with EMA200 | 2023-26: win 45.3%/45.5% 0.095/0.107R | 2016-22: win 41.4%, 0.012R, t 0.3, n 833, buys 0.043, sells -0.029
+1h  Supply and demand          stop 2 range, target 1.5 R, with EMA200 | 2023-26: win 45.4%/42.6% 0.103/0.037R | 2016-22: win 37.8%, -0.078R, t -1.6, n 590, buys -0.056, sells -0.108
+1h  EMA pullback               stop 2 range, target 1.5 R, with EMA200 | 2023-26: win 43.5%/43.6% 0.058/0.075R | 2016-22: win 38.7%, -0.056R, t -1.7, n 1319, buys -0.058, sells -0.053
+1h  Break of structure         stop 2 range, target 1.5 R | 2023-26: win 43.7%/44.6% 0.058/0.088R | 2016-22: win 40.8%, -0.005R, t -0.1, n 1033, buys 0.034, sells -0.050
+1h  Break of structure         stop 2 range, target 1   R, with EMA200 | 2023-26: win 54.2%/59.2% 0.051/0.155R | 2016-22: win 50.9%, -0.005R, t -0.1, n 931, buys 0.009, sells -0.022
+1h  Order block                stop 2 range, target 1.5 R, with EMA200 | 2023-26: win 43.6%/42.7% 0.061/0.044R | 2016-22: win 39.8%, -0.028R, t -0.7, n 952, buys -0.040, sells -0.012
+1h  Break of structure         stop 1 range, target 1.5 R | 2023-26: win 43.7%/47.4% 0.048/0.159R | 2016-22: win 40.4%, -0.036R, t -1.1, n 1408, buys -0.045, sells -0.024
+1h  Liquidity sweep            stop 2 range, target 1.5 R, with EMA200 | 2023-26: win 43.7%/47.0% 0.057/0.163R | 2016-22: win 39.8%, -0.030R, t -0.7, n 847, buys -0.048, sells -0.004
+1h  Engulfing                  stop 2 range, target 1.5 R, with EMA200 | 2023-26: win 43.0%/43.0% 0.041/0.054R | 2016-22: win 40.6%, -0.010R, t -0.3, n 1557, buys 0.028, sells -0.055

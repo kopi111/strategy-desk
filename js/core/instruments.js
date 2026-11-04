@@ -16,6 +16,7 @@
     synthetic('BOOM1000', 'Boom 1000 Index', 4, 15000, 1.5),
     synthetic('CRASH1000', 'Crash 1000 Index', 4, 7000, 1.5),
     synthetic('stpRNG', 'Step Index', 1, 8000, 0.1, 10),
+    synthetic('stpRNG2', 'Step Index 200', 1, 10000, 0.2, 10),
     {
       symbol: 'frxXAUUSD', name: 'Gold / US Dollar', shortName: 'XAUUSD', group: 'Gold',
       decimals: 2, pipSize: 0.1, contractSize: 100, minLot: 0.01, lotStep: 0.01,

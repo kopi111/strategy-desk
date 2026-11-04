@@ -1,0 +1,14 @@
+# Background service for the phone alerts. telegram-setup.mjs fills in @NODE@ and @PROJECT@ and installs it.
+[Unit]
+Description=Strategy Desk phone alerts (Deriv setups to Telegram)
+After=network-online.target
+
+[Service]
+WorkingDirectory=@PROJECT@
+ExecStart=@NODE@ alerts/telegram-watcher.mjs
+# Restart after a crash, and keep trying rather than giving up.
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=default.target

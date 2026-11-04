@@ -1,0 +1,104 @@
+Gap code matches the Desk on a sample: 183 gaps compared.
+Period: 2025-11-03 to 2026-11-03
+
+===== 5m: DOES PRICE COME BACK? =====
+Gaps measured: 145095 across 10 markets
+Within N candles | reach gap edge | fill whole gap | fake: other side | fake: random moment | SHUFFLED candles: edge
+               5 |          68.0% |          43.5% |            67.8% |               68.1% |      67.8%
+              20 |          83.1% |          68.3% |            83.0% |               83.1% |      83.0%
+             100 |          92.2% |          85.2% |            92.3% |               92.4% |      92.2%
+             500 |          96.5% |          93.3% |            96.5% |               96.5% |      96.5%
+Median candles to reach the gap edge: 2. Same distance the other way: 2. Shuffled candles: 2.
+Reached the gap BEFORE the same distance the other way: 50.0% of 118653 (about +/-0.3% by weekly grouping). Shuffled candles: 50.0%. No effect would be about the shuffled figure.
+R_10     candles 105120 gaps  15203 touched in 20  82.7% gap-first  49.9% of 12394
+R_25     candles 105119 gaps  14938 touched in 20  82.8% gap-first  50.1% of 12261
+R_50     candles 105120 gaps  14937 touched in 20  83.7% gap-first  50.3% of 12138
+R_75     candles 105120 gaps  14852 touched in 20  82.8% gap-first  49.3% of 12099
+R_100    candles 105120 gaps  14859 touched in 20  83.2% gap-first  50.0% of 12172
+1HZ10V   candles 105119 gaps  14316 touched in 20  82.8% gap-first  49.8% of 11756
+1HZ25V   candles 105120 gaps  14009 touched in 20  83.2% gap-first  49.5% of 11471
+1HZ50V   candles 105120 gaps  13982 touched in 20  84.2% gap-first  50.6% of 11395
+1HZ75V   candles 105120 gaps  13981 touched in 20  82.5% gap-first  50.2% of 11524
+1HZ100V  candles 105120 gaps  14018 touched in 20  82.9% gap-first  50.2% of 11443
+
+===== 15m: DOES PRICE COME BACK? =====
+Gaps measured: 44066 across 10 markets
+Within N candles | reach gap edge | fill whole gap | fake: other side | fake: random moment | SHUFFLED candles: edge
+               5 |          67.8% |          43.2% |            67.6% |               67.9% |      67.9%
+              20 |          82.6% |          68.0% |            82.7% |               83.1% |      83.1%
+             100 |          92.1% |          85.0% |            92.2% |               92.3% |      92.2%
+             500 |          96.4% |          93.2% |            96.5% |               96.6% |      96.5%
+Median candles to reach the gap edge: 2. Same distance the other way: 2. Shuffled candles: 2.
+Reached the gap BEFORE the same distance the other way: 50.0% of 36053 (about +/-0.6% by weekly grouping). Shuffled candles: 50.1%. No effect would be about the shuffled figure.
+R_10     candles  35040 gaps   4559 touched in 20  82.6% gap-first  50.2% of 3735
+R_25     candles  35040 gaps   4557 touched in 20  80.9% gap-first  49.2% of 3786
+R_50     candles  35039 gaps   4409 touched in 20  83.3% gap-first  49.7% of 3582
+R_75     candles  35040 gaps   4396 touched in 20  82.3% gap-first  49.9% of 3603
+R_100    candles  35040 gaps   4514 touched in 20  83.7% gap-first  51.4% of 3675
+1HZ10V   candles  35040 gaps   4355 touched in 20  82.3% gap-first  49.1% of 3580
+1HZ25V   candles  35040 gaps   4247 touched in 20  83.6% gap-first  51.4% of 3470
+1HZ50V   candles  35040 gaps   4284 touched in 20  83.6% gap-first  50.8% of 3500
+1HZ75V   candles  35040 gaps   4401 touched in 20  81.6% gap-first  49.1% of 3608
+1HZ100V  candles  35040 gaps   4344 touched in 20  82.5% gap-first  49.5% of 3514
+
+===== 1h: DOES PRICE COME BACK? =====
+Gaps measured: 10030 across 10 markets
+Within N candles | reach gap edge | fill whole gap | fake: other side | fake: random moment | SHUFFLED candles: edge
+               5 |          67.7% |          42.7% |            67.2% |               67.3% |      67.9%
+              20 |          82.7% |          67.8% |            82.7% |               82.9% |      83.2%
+             100 |          92.4% |          85.5% |            91.9% |               92.5% |      92.3%
+             500 |          96.4% |          93.0% |            96.5% |               96.5% |      96.7%
+Median candles to reach the gap edge: 2. Same distance the other way: 2. Shuffled candles: 2.
+Reached the gap BEFORE the same distance the other way: 50.0% of 8169 (about +/-1.1% by weekly grouping). Shuffled candles: 50.6%. No effect would be about the shuffled figure.
+R_10     candles   8760 gaps    989 touched in 20  82.2% gap-first  49.3% of 826
+R_25     candles   8760 gaps   1003 touched in 20  83.3% gap-first  48.8% of 821
+R_50     candles   8760 gaps    982 touched in 20  85.6% gap-first  51.5% of 785
+R_75     candles   8760 gaps   1016 touched in 20  83.4% gap-first  50.6% of 818
+R_100    candles   8760 gaps    986 touched in 20  83.0% gap-first  51.0% of 794
+1HZ10V   candles   8760 gaps   1029 touched in 20  80.5% gap-first  46.4% of 844
+1HZ25V   candles   8760 gaps    953 touched in 20  83.1% gap-first  53.9% of 776
+1HZ50V   candles   8760 gaps    997 touched in 20  83.4% gap-first  52.0% of 818
+1HZ75V   candles   8760 gaps   1041 touched in 20  81.0% gap-first  47.0% of 842
+1HZ100V  candles   8760 gaps   1034 touched in 20  81.8% gap-first  50.1% of 845
+
+===== 15m: WHAT TELLS US IT WILL COME BACK? =====
+By how far price is from the gap, in average candle ranges:
+distance 0 to 0.25             gaps   9339 | edge in 20  96.3% | other side in 20  95.9% | gap first  50.5%
+distance 0.25 to 0.5           gaps  10580 | edge in 20  88.4% | other side in 20  88.8% | gap first  49.9%
+distance 0.5 to 1              gaps  16500 | edge in 20  79.7% | other side in 20  79.5% | gap first  50.3%
+distance 1 to 2                gaps   7514 | edge in 20  64.8% | other side in 20  65.2% | gap first  49.5%
+distance 2 to Infinity         gaps    133 | edge in 20  33.1% | other side in 20  54.1% | gap first  41.4%
+By gap size, in average candle ranges:
+size 0.25 to 0.5               gaps  21909 | edge in 20  83.0% | other side in 20  83.5% | gap first  49.7%
+size 0.5 to 1                  gaps  18248 | edge in 20  82.4% | other side in 20  82.0% | gap first  50.5%
+size 1 to 2                    gaps   3879 | edge in 20  81.9% | other side in 20  81.9% | gap first  49.8%
+size 2 to Infinity             gaps     30 | edge in 20  83.3% | other side in 20  83.3% | gap first  45.5%
+By direction:
+bullish gap (price above)      gaps  21991 | edge in 20  82.9% | other side in 20  82.7% | gap first  49.7%
+bearish gap (price below)      gaps  22075 | edge in 20  82.4% | other side in 20  82.7% | gap first  50.4%
+By trend when the gap formed:
+gap in the trend direction     gaps  30957 | edge in 20  81.8% | other side in 20  81.8% | gap first  50.2%
+gap against the trend          gaps  13109 | edge in 20  84.5% | other side in 20  84.7% | gap first  49.6%
+
+===== CAN IT BE TRADED? One trade at a time per market. Results in R. =====
+
+--- 5m ---
+Rule                              trades  win    gross R   net R   net t  | last 30% net R (t) | markets up | SHUFFLED net R
+Trade back to the gap (1:1)        68697  49.7%   -0.006   -0.273   -70.9  |  -0.271 (-38.7) | 0/10 | -0.270
+Buy/sell the retest, 1R target     97055  48.9%   -0.018   -0.259   -79.0  |  -0.246 (-41.2) | 0/10 | -0.253
+Buy/sell the retest, 2R target     74341  33.5%    0.006   -0.234   -44.7  |  -0.221 (-23.0) | 0/10 | -0.231
+Buy/sell the retest, 3R target     58108  25.4%    0.015   -0.223   -30.7  |  -0.214 (-16.1) | 0/10 | -0.224
+
+--- 15m ---
+Rule                              trades  win    gross R   net R   net t  | last 30% net R (t) | markets up | SHUFFLED net R
+Trade back to the gap (1:1)        21253  49.8%   -0.005   -0.156   -22.6  |  -0.149 (-11.9) | 0/10 | -0.161
+Buy/sell the retest, 1R target     30518  49.6%   -0.008   -0.144   -25.0  |  -0.137 (-13.0) | 0/10 | -0.151
+Buy/sell the retest, 2R target     23718  33.5%    0.004   -0.131   -14.3  |  -0.113 (-6.6) | 0/10 | -0.130
+Buy/sell the retest, 3R target     19014  25.0%   -0.001   -0.135   -10.8  |  -0.131 (-5.7) | 0/10 | -0.130
+
+--- 1h ---
+Rule                              trades  win    gross R   net R   net t  | last 30% net R (t) | markets up | SHUFFLED net R
+Trade back to the gap (1:1)         5158  50.5%    0.009   -0.066    -4.7  |  -0.042 (-1.6) | 0/10 | -0.083
+Buy/sell the retest, 1R target      7281  49.1%   -0.018   -0.084    -7.2  |  -0.116 (-5.5) | 0/10 | -0.070
+Buy/sell the retest, 2R target      5664  33.2%   -0.005   -0.070    -3.8  |  -0.096 (-2.8) | 0/10 | -0.064
+Buy/sell the retest, 3R target      4580  25.7%    0.027   -0.038    -1.5  |  -0.063 (-1.4) | 2/10 | -0.065

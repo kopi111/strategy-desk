@@ -1,0 +1,22 @@
+Gold 1H 2016-01-03 to 2022-12-30, 41404 candles, price 1062.341 to 1823.463
+
+3R target (THE RULE BEING TESTED):  474 trades, win 24.3%, -0.079R after spread, t -1.0; before spread -0.035R
+  buys:   260 trades, win 25.0%, -0.054R after spread, t -0.5
+  sells:  214 trades, win 23.4%, -0.110R after spread, t -0.9
+  2016:   78 trades, win 23.1%, -0.117R after spread, t -0.6, total -9.1R
+  2017:   62 trades, win 24.2%, -0.092R after spread, t -0.4, total -5.7R
+  2018:   66 trades, win 21.2%, -0.208R after spread, t -1.0, total -13.7R
+  2019:   72 trades, win 22.2%, -0.166R after spread, t -0.8, total -12.0R
+  2020:   65 trades, win 24.6%, -0.054R after spread, t -0.2, total -3.5R
+  2021:   57 trades, win 28.1%, +0.086R after spread, t 0.4, total 4.9R
+  2022:   74 trades, win 27.0%, +0.020R after spread, t 0.1, total 1.5R
+  total -37.6R, worst drop -62.0R, longest losing streak 18
+  shuffled candles, 20 runs: 11526 trades, win 25.5%, -0.030R after spread, t -1.9
+
+2R target (for context):  495 trades, win 33.1%, -0.054R after spread, t -0.8; before spread -0.009R
+  buys:   273 trades, win 33.0%, -0.061R after spread, t -0.7
+  sells:  222 trades, win 33.3%, -0.045R after spread, t -0.5
+
+1R target (for context):  510 trades, win 47.6%, -0.093R after spread, t -2.1; before spread -0.048R
+  buys:   282 trades, win 48.2%, -0.082R after spread, t -1.4
+  sells:  228 trades, win 46.9%, -0.106R after spread, t -1.6

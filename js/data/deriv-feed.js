@@ -5,10 +5,15 @@
   const CONNECT_TIMEOUT_MS = 8000;
   const REQUEST_TIMEOUT_MS = 20000;
   const KEEPALIVE_MS = 30000;
+  const POLL_INTERVAL_MS = 10000;
+  // Asked for one candle, Deriv returns a rolling window with a sliding start time, not the forming candle.
+  // Asking for two or more returns proper candles, so a one-candle request asks for two and keeps the newest.
+  const MINIMUM_CANDLES_REQUESTED = 2;
 
   /**
    * Deriv's public WebSocket API (https://api.deriv.com). Candle history and live candles need no account and
    * no secret: app_id 1089 is Deriv's public test id. Covers the synthetic indices, XAUUSD and USD pairs.
+   * That public id refuses live streaming ("Symbol X is invalid"), so live candles fall back to polling.
    */
   class DerivFeed {
     constructor({ endpoint, appId }) {
@@ -20,6 +25,8 @@
       this.pending = new Map();
       this.streams = new Map();
       this.keepalive = null;
+      this.requestQueue = Promise.resolve();
+      this.streamingRefused = false;
     }
 
     connect() {
@@ -64,7 +71,18 @@
       if (this.socket && this.socket.readyState === WebSocket.OPEN) this.socket.send(JSON.stringify(payload));
     }
 
+    /** Queues a request. Deriv can silently drop requests sent at the same time, so only one runs at once. */
     request(payload) {
+      const run = () => this.sendAndWait(payload);
+      const result = this.requestQueue.then(run, run);
+      // A failed request must not block the ones behind it. Its caller still receives the failure through `result`.
+      this.requestQueue = result.catch(() => {});
+      return result;
+    }
+
+    /** Sends one request and waits for its answer. A closed connection fails straight away. */
+    sendAndWait(payload) {
+      if (!this.socket || this.socket.readyState !== WebSocket.OPEN) return Promise.reject(new Error('Connection to Deriv closed.'));
       const requestId = this.nextRequestId++;
       return new Promise((resolve, reject) => {
         const timer = setTimeout(() => {
@@ -82,33 +100,57 @@
       let collected = [];
       let end = 'latest';
       while (collected.length < count) {
-        const wanted = Math.min(MAX_CANDLES_PER_REQUEST, count - collected.length);
+        const wanted = Math.max(MINIMUM_CANDLES_REQUESTED, Math.min(MAX_CANDLES_PER_REQUEST, count - collected.length));
         const answer = await this.request({ ticks_history: symbol, style: 'candles', granularity: seconds, count: wanted, end, adjust_start_time: 1 });
         const batch = (answer.candles || []).map(parseHistoryCandle).filter((candle) => !collected.length || candle.time < collected[0].time);
         collected = batch.concat(collected);
         if (batch.length < wanted) break;
         end = String(batch[0].time - 1);
       }
-      return collected;
+      return collected.slice(-count);
     }
 
     /** Calls onCandle with every update to the forming candle. Returns a function that stops the stream. */
     subscribe(symbol, seconds, onCandle) {
+      if (this.streamingRefused) return this.pollCandles(symbol, seconds, onCandle);
       let subscriptionId = null;
       let stopped = false;
+      let stopPolling = null;
       this.request({ ticks_history: symbol, style: 'candles', granularity: seconds, count: 1, end: 'latest', subscribe: 1 })
         .then((answer) => {
           subscriptionId = answer.subscription && answer.subscription.id;
           if (stopped) this.send({ forget: subscriptionId });
           else if (subscriptionId) this.streams.set(subscriptionId, onCandle);
         })
-        .catch((error) => console.warn('[deriv] live stream failed', error));
+        .catch((error) => {
+          // Remember the refusal, so later charts skip straight to polling.
+          console.warn('[deriv] live stream refused, polling instead', error);
+          this.streamingRefused = true;
+          if (!stopped) stopPolling = this.pollCandles(symbol, seconds, onCandle);
+        });
       return () => {
         stopped = true;
+        if (stopPolling) stopPolling();
         if (!subscriptionId) return;
         this.streams.delete(subscriptionId);
         this.send({ forget: subscriptionId });
       };
+    }
+
+    /** Asks for the newest candle on a timer. It reconnects by itself if the connection dropped. */
+    pollCandles(symbol, seconds, onCandle) {
+      let stopped = false;
+      const poll = async () => {
+        try {
+          const [latest] = await this.candles(symbol, seconds, 1);
+          if (latest && !stopped) onCandle(latest);
+        } catch (error) {
+          console.warn('[deriv] candle poll failed, will retry', error);
+        }
+      };
+      poll();
+      const timer = setInterval(poll, POLL_INTERVAL_MS);
+      return () => { stopped = true; clearInterval(timer); };
     }
   }
 

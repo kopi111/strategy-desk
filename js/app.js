@@ -7,6 +7,8 @@
     { group: 'Trade', items: [
       { view: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
       { view: 'chart', label: 'Chart', icon: 'chart' },
+      { view: 'alerts', label: 'Alerts', icon: 'bell' },
+      { view: 'trades', label: 'Trades', icon: 'radar' },
       { view: 'calculator', label: 'Position size', icon: 'calculator' },
       { view: 'checklist', label: 'Checklist', icon: 'checklist' },
     ] },
@@ -22,6 +24,8 @@
   ];
 
   const ENTRY_TIMEFRAMES = ['1m', '5m', '15m'];
+  const SIDEBAR_HIDDEN_KEY = 'strategy-desk.sidebar-hidden';
+  const PHONE_LAYOUT_QUERY = '(max-width: 920px)';
 
   /** Holds shared state, loads candles, runs the strategy and tells the views when something changed. */
   class App {
@@ -106,6 +110,7 @@
         this.isLoading = false;
         this.emit('loading', false);
         this.emit('analysis', this.analysis);
+        if (symbol !== this.symbol) this.refresh();
       }
     }
 
@@ -146,6 +151,8 @@
       const name = this.views[viewName] ? viewName : 'dashboard';
       if (location.hash.slice(1) !== name) history.replaceState(null, '', `#${name}`);
       this.currentView = name;
+      // The chart page uses a white theme, like Deriv's chart. The CSS keys off this attribute.
+      document.body.dataset.page = name;
       $$('.view').forEach((section) => { section.hidden = section.dataset.view !== name; });
       $$('.nav-item').forEach((item) => item.setAttribute('aria-current', item.dataset.view === name ? 'page' : 'false'));
       const view = this.views[name];
@@ -174,7 +181,8 @@
       });
 
       $('#menuButton').innerHTML = APA.icons.menu;
-      $('#menuButton').addEventListener('click', () => this.openMenu());
+      $('#menuButton').addEventListener('click', () => this.handleMenuButton());
+      this.applySidebarHidden(APA.storage.readJson(SIDEBAR_HIDDEN_KEY) === true);
       $('#scrim').addEventListener('click', () => this.closeMenu());
 
       $('#symbolSelect').innerHTML = APA.ui.instrumentOptions(this.instruments, this.symbol);
@@ -215,6 +223,21 @@
 
     tickClock() {
       $('#clock').textContent = `${new Date().toISOString().slice(11, 19)} UTC`;
+    }
+
+    /** On a computer the button hides or shows the sidebar. On a phone it slides the sidebar in. */
+    handleMenuButton() {
+      if (window.matchMedia(PHONE_LAYOUT_QUERY).matches) { this.openMenu(); return; }
+      const isHidden = document.body.dataset.sidebar !== 'hidden';
+      this.applySidebarHidden(isHidden);
+      APA.storage.writeJson(SIDEBAR_HIDDEN_KEY, isHidden);
+    }
+
+    /** Applies the hidden or shown state. The CSS only acts on this at computer widths. */
+    applySidebarHidden(isHidden) {
+      document.body.dataset.sidebar = isHidden ? 'hidden' : 'shown';
+      $('#menuButton').setAttribute('aria-label', isHidden ? 'Show navigation' : 'Hide navigation');
+      $('#menuButton').title = isHidden ? 'Show the side menu' : 'Hide the side menu';
     }
 
     openMenu() {
