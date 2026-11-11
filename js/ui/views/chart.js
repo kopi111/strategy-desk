@@ -8,6 +8,8 @@
   const DAILY_BARS_SHOWN = 270;
   const TRADE_PLAN_REFRESH_MS = 60000;
   const TRADE_LINE_COLORS = { entry: '#1d4ed8', stop: '#dc2626', target: '#059669' };
+  const APA_COLORS = { buy: '#059669', sell: '#dc2626', setup: '#b45309', cancel: '#6b7280' };
+  const DASHED = 2;
 
   // Each range button picks a sensible timeframe and how many of its candles to show, as Deriv's chart does.
   const RANGES = {
@@ -56,6 +58,7 @@
             <div class="chart-box" data-slot="chart" aria-label="Price chart">
               <div class="chart-legend" data-slot="legend"></div>
               <div class="trade-card" data-slot="trade-card" hidden></div>
+              <div class="trade-card apa-card" data-slot="apa-card" hidden></div>
             </div>
           </div>
           <div class="deriv-bottom">
@@ -64,6 +67,8 @@
             <button type="button" class="range-link" data-action="fit">Fit all</button>
             <button type="button" class="range-link" data-action="toggle-details" aria-expanded="true">Hide details</button>
             <button type="button" class="range-link" data-action="toggle-trade-lines"></button>
+            <button type="button" class="range-link" data-action="toggle-apa-confirm"></button>
+            <button type="button" class="range-link" data-action="apa-confirm-mode" title="Target size for the APA 15m/5m signals"></button>
             <button type="button" class="range-link" data-action="toggle-full-view"></button>
             <span class="spacer"></span>
             <span class="deriv-clock" data-slot="utc-clock"></span>
@@ -98,8 +103,11 @@
       this.prepareFullView();
       this.tickUtcClock();
       setInterval(() => this.tickUtcClock(), 1000);
-      setInterval(() => { if (!section.hidden) this.loadTradePlan(); }, TRADE_PLAN_REFRESH_MS);
+      setInterval(() => { if (!section.hidden) { this.loadTradePlan(); this.loadApaSignals(); } }, TRADE_PLAN_REFRESH_MS);
       this.syncTradeButton();
+      this.syncApaButtons();
+      this.overlayMarkers = [];
+      this.apaMarkers = [];
       section.addEventListener('click', (event) => this.handleClick(event));
       app.on('analysis', () => { if (!section.hidden) this.refresh(); else this.renderSide(); });
       // Start the chart straight away, so it is in the queue ahead of the slower strategy analysis.
@@ -220,8 +228,9 @@
         this.renderLegend(candles[candles.length - 1], instrument, timeframe);
         this.updateMarkup(candles, timeframe);
         this.streamLive(symbol, timeframe, instrument);
-        // This runs behind the chart, so the candles never wait for it.
+        // These run behind the chart, so the candles never wait for them.
         this.loadTradePlan();
+        this.loadApaSignals();
       } catch (error) {
         APA.ui.toast(`Chart: ${error.message}`, 'error');
       } finally {
@@ -282,6 +291,116 @@
         <span>Entry ${price(plan.entry)} · Stop ${price(plan.stop)} · TP ${price(plan.target)} · ${plan.rewardToRisk.toFixed(1)}R</span>
         <small class="${proof.tone}">${escapeHtml(proof.text)}</small>` : `
         <strong>No trade</strong><span>${escapeHtml(plan.reason)}</span>`;
+    },
+
+    /** Works out the APA 15m setup / 5m confirmation signals for this market. Live prices only, like the potential trade. */
+    async loadApaSignals() {
+      const symbol = this.app.symbol;
+      if (!this.chart || this.isLoadingApa) return;
+      if (!this.app.settings.chart.showApaConfirm) { this.showApaSignals(null, symbol); return; }
+      if (this.app.market.status.kind !== 'live') { this.showApaSignals({ error: 'APA signals only run on live Deriv prices.' }, symbol); return; }
+      this.isLoadingApa = true;
+      try {
+        const result = await APA.apaConfirm.forMarket(this.app.market, this.app.instrument(symbol), this.app.settings.chart.apaConfirmMode);
+        if (symbol === this.app.symbol) this.showApaSignals(result, symbol);
+      } catch (error) {
+        console.warn('[chart] could not work out the APA 15m/5m signals', error);
+        if (symbol === this.app.symbol) this.showApaSignals({ error: 'Could not check APA signals: Deriv did not answer.' }, symbol);
+      } finally {
+        this.isLoadingApa = false;
+        if (symbol !== this.app.symbol) this.loadApaSignals();
+      }
+    },
+
+    /** Draws the APA lines and markers and fills the APA card. A null result hides everything. */
+    showApaSignals(result, symbol) {
+      const card = $('[data-slot="apa-card"]', this.section);
+      const isShown = Boolean(result) && this.app.settings.chart.showApaConfirm;
+      card.hidden = !isShown;
+      if (!isShown || result.error) {
+        this.chart.setLineGroup('apa', []);
+        this.apaMarkers = [];
+        this.applyMarkers();
+        if (isShown) card.innerHTML = `<strong>APA 15m/5m</strong><span>${escapeHtml(result.error)}</span>`;
+        return;
+      }
+      const instrument = this.app.instrument(symbol);
+      const price = (value) => format.price(instrument, value);
+      const { state, settings } = result;
+      this.chart.setLineGroup('apa', this.apaLines(state, price));
+      this.apaMarkers = this.apaMarkersFor(result.events);
+      this.applyMarkers();
+      card.innerHTML = `${this.apaCardText(state, settings, price)}
+        <small class="proof-lost">${escapeHtml(settings.proof)} Closed candles only.</small>`;
+    },
+
+    /** Lines for the APA state: entry/stop/target of an open trade, or the confirm and cancel levels of a waiting setup. */
+    apaLines(state, price) {
+      if (state.status === 'open') {
+        return [
+          { price: state.entry, title: `APA ${state.side > 0 ? 'BUY' : 'SELL'}`, color: TRADE_LINE_COLORS.entry },
+          { price: state.stop, title: 'APA STOP', color: TRADE_LINE_COLORS.stop },
+          { price: state.target, title: 'APA TP', color: TRADE_LINE_COLORS.target },
+        ];
+      }
+      if (state.status !== 'waiting') return [];
+      const buying = state.side > 0;
+      const lines = [{ price: state.cancelAt, title: 'APA cancel', color: APA_COLORS.cancel, style: DASHED }];
+      if (state.confirmAt !== null) lines.push({ price: state.confirmAt, title: `APA ${buying ? 'buy above' : 'sell below'}`, color: buying ? APA_COLORS.buy : APA_COLORS.sell, style: DASHED });
+      return lines;
+    },
+
+    /** The card's words: what the signal is now, and exactly what to wait for. */
+    apaCardText(state, settings, price) {
+      const word = (side) => (side > 0 ? 'BUY' : 'SELL');
+      const tone = (side) => (side > 0 ? 'bull' : 'bear');
+      if (state.status === 'open') {
+        return `<strong class="${tone(state.side)}">APA ${word(state.side)} taken ${escapeHtml(format.time(state.entryTime))}</strong>
+          <span>Entry ${price(state.entry)} · Stop ${price(state.stop)} · TP ${price(state.target)} · ${escapeHtml(settings.label)}</span>`;
+      }
+      if (state.status === 'waiting') {
+        const buying = state.side > 0;
+        const confirm = state.confirmAt === null ? `a ${buying ? 'green' : 'red'} 5m candle breaks the last 5m swing`
+          : `a ${buying ? 'green' : 'red'} 5m candle closes ${buying ? 'above' : 'below'} ${price(state.confirmAt)}`;
+        return `<strong class="wait">Potential ${word(state.side)} – waiting for 5m confirmation</strong>
+          <span>15m sweep closed ${escapeHtml(format.time(state.setupTime + APA.apaConfirm.SETUP_SECONDS))}. Take it only if ${confirm}.</span>
+          <span>Cancelled if a 5m candle closes ${buying ? 'below' : 'above'} ${price(state.cancelAt)} · expires ${escapeHtml(format.time(state.expires))}</span>`;
+      }
+      return `<strong>APA 15m/5m: no setup right now</strong><span>Waiting for a 15m sweep. Past setups and trades are marked on the chart.</span>`;
+    },
+
+    /** Chart markers for past APA setups, entries and results, placed on the chart's own candles. */
+    apaMarkersFor(events) {
+      const chartSeconds = APA.timeframes.byKey(this.app.settings.selected.chartTimeframe).seconds;
+      const toBar = (time) => Math.floor(time / chartSeconds) * chartSeconds;
+      const markers = [];
+      for (const event of events) {
+        const buying = event.side > 0;
+        const time = toBar(event.kind === 'setup' ? event.time - APA.apaConfirm.SETUP_SECONDS : event.time);
+        if (!this.chartTimes.has(time)) continue;
+        if (event.kind === 'setup' && event.taken) {
+          markers.push({ time, position: buying ? 'belowBar' : 'aboveBar', color: APA_COLORS.setup, shape: 'square', text: `Potential ${buying ? 'BUY' : 'SELL'}` });
+        } else if (event.kind === 'entry') {
+          markers.push({ time, position: buying ? 'belowBar' : 'aboveBar', color: buying ? APA_COLORS.buy : APA_COLORS.sell, shape: buying ? 'arrowUp' : 'arrowDown', text: buying ? 'BUY' : 'SELL' });
+        } else if (event.kind === 'exit') {
+          markers.push({ time, position: buying ? 'aboveBar' : 'belowBar', color: event.netR > 0 ? APA_COLORS.buy : APA_COLORS.sell, shape: 'circle', text: format.r(event.netR) });
+        }
+      }
+      return markers;
+    },
+
+    /** Puts the older APA markers (if ticked) and the APA 15m/5m markers on the chart together. */
+    applyMarkers() {
+      if (this.chart) this.chart.setMarkers([...(this.overlayMarkers || []), ...(this.apaMarkers || [])]);
+    },
+
+    /** Words the APA on/off and target buttons for what a click will do. */
+    syncApaButtons() {
+      const options = this.app.settings.chart;
+      $('[data-action="toggle-apa-confirm"]', this.section).textContent = options.showApaConfirm ? 'Hide APA signals' : 'Show APA signals';
+      const mode = $('[data-action="apa-confirm-mode"]', this.section);
+      mode.hidden = !options.showApaConfirm;
+      mode.textContent = `APA target: ${(APA.apaConfirm.MODES[options.apaConfirmMode] || APA.apaConfirm.MODES.profit).label}`;
     },
 
     /** Words the show or hide button for what a click will do. */
@@ -453,7 +572,8 @@
         if (plan.partialTarget) this.chart.addLine(plan.partialTarget, 'TP1 50%', COLORS.bull, 1, 1);
         this.chart.addLine(plan.target, plan.liquidity ? 'Target: liquidity' : 'Target', COLORS.bull, 0, 2);
       }
-      if (options.showApaMarkers) this.chart.setMarkers(this.markers(analysis, chartSeconds, instrument));
+      this.overlayMarkers = options.showApaMarkers ? this.markers(analysis, chartSeconds, instrument) : [];
+      this.applyMarkers();
     },
 
     markers(analysis, chartSeconds, instrument) {
@@ -543,6 +663,18 @@
         APA.settings.save(this.app.settings);
         this.syncTradeButton();
         this.loadTradePlan();
+      }
+      if (target.dataset.action === 'toggle-apa-confirm') {
+        this.app.settings.chart.showApaConfirm = !this.app.settings.chart.showApaConfirm;
+        APA.settings.save(this.app.settings);
+        this.syncApaButtons();
+        this.loadApaSignals();
+      }
+      if (target.dataset.action === 'apa-confirm-mode') {
+        this.app.settings.chart.apaConfirmMode = this.app.settings.chart.apaConfirmMode === 'winRate' ? 'profit' : 'winRate';
+        APA.settings.save(this.app.settings);
+        this.syncApaButtons();
+        this.loadApaSignals();
       }
       if (target.dataset.action === 'latest') this.chart.showRecent();
       if (target.dataset.action === 'fit') this.chart.chart.timeScale().fitContent();

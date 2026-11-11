@@ -557,6 +557,9 @@ body[data-page="chart"] .toast { color: var(--text); }
 .trade-card .bear { color: #dc2626; }
 .trade-card small { color: #5b6472; }
 .trade-card small.proof-lost { color: #b42318; }
+/* The APA 15m/5m card sits at the top left, under the price legend, so it never covers the potential-trade card. */
+.trade-card.apa-card { top: 34px; bottom: auto; }
+.trade-card.apa-card .wait { color: #b45309; }
 
 /* The Trades page. */
 .trades-note { margin-top: 10px; }

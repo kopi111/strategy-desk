@@ -1,0 +1,176 @@
+//@version=6
+// CINCO APA - Invalidation Strategy, with a confirmation candle before entry.
+// Tested best on the 2H chart (gold + USD pairs): RR 1.5, stop 0.5 ATR past the sweep, daily EMA 50 filter.
+// Change from the original: a sweep (hidden invalidation) no longer enters straight away.
+// It waits for a candle that closes past the sweep candle's high (buy) or low (sell).
+strategy("CINCO APA - Invalidation + Confirmation",
+     overlay=true,
+     initial_capital=1000,
+     pyramiding=0,
+     process_orders_on_close=true)
+
+// ---------- SETTINGS ----------
+swingLength   = input.int(5, "Swing Detection", minval=2)
+rr            = input.float(1.5, "Risk Reward", minval=0.5, step=0.25)
+confirmBars   = input.int(1, "Bars allowed for confirmation", minval=1, maxval=10)
+riskPercent   = input.float(1.0, "Risk per trade (% of equity)", minval=0.1, maxval=10)
+stopBufferAtr = input.float(0.5, "Stop buffer past the sweep (x ATR 14)", minval=0, step=0.25)
+useDailyTrend = input.bool(true, "Daily trend filter (yesterday's daily EMA)")
+dailyLength   = input.int(50, "Daily EMA length", minval=5)
+useTrend      = input.bool(false, "Chart trend filter: buy only above EMA, sell only below")
+trendLength   = input.int(200, "Trend EMA length", minval=10)
+showHidden    = input.bool(true, "Show Hidden Invalidation")
+showX         = input.bool(true, "Show Invalidation X")
+showNew       = input.bool(true, "Show New Invalidation")
+
+// ---------- SWING DETECTION ----------
+// Pivots are confirmed swingLength bars after they form.
+ph = ta.pivothigh(high, swingLength, swingLength)
+pl = ta.pivotlow(low, swingLength, swingLength)
+
+var float lastHigh = na
+var float lastLow = na
+var float bullInvalidation = na
+var float bearInvalidation = na
+var bool bullActive = false
+var bool bearActive = false
+
+// Remember the most recent confirmed swing high and low.
+if not na(ph)
+    lastHigh := ph
+if not na(pl)
+    lastLow := pl
+
+// ---------- STRUCTURE BREAKS ----------
+// A close through the last swing high/low is a break of structure.
+bullBreak = not na(lastHigh) and close > lastHigh and close[1] <= lastHigh
+bearBreak = not na(lastLow) and close < lastLow and close[1] >= lastLow
+
+// A break sets a new invalidation level at the opposite swing.
+if bullBreak and not na(lastLow)
+    bullInvalidation := lastLow
+    bullActive := true
+    bearActive := false
+if bearBreak and not na(lastHigh)
+    bearInvalidation := lastHigh
+    bearActive := true
+    bullActive := false
+
+// ---------- HIDDEN INVALIDATION (LIQUIDITY SWEEP) ----------
+// Wick through the level but close back on the right side of it.
+hiddenBull = bullActive and low < bullInvalidation and close > bullInvalidation
+hiddenBear = bearActive and high > bearInvalidation and close < bearInvalidation
+
+// ---------- INVALIDATION X ----------
+// A full close through the level kills the setup.
+invalidBull = bullActive and close < bullInvalidation
+invalidBear = bearActive and close > bearInvalidation
+if invalidBull
+    bullActive := false
+if invalidBear
+    bearActive := false
+
+// ---------- PENDING SETUP (waiting for confirmation) ----------
+var int   pendingSide    = 0      // 1 = waiting to buy, -1 = waiting to sell, 0 = nothing pending
+var float pendingHigh    = na     // sweep candle high
+var float pendingLow     = na     // sweep candle low
+var float pendingExtreme = na     // lowest low (buy) / highest high (sell) since the sweep = stop
+var int   pendingLeft    = 0      // candles left to confirm
+
+isFlat = strategy.position_size == 0
+buySignal = false
+sellSignal = false
+float entryStop = na
+
+// 1) Work a setup that is already waiting (not on the sweep candle itself).
+if pendingSide != 0 and isFlat
+    // Track the sweep extreme so the stop sits beyond the whole sweep.
+    pendingExtreme := pendingSide == 1 ? math.min(pendingExtreme, low) : math.max(pendingExtreme, high)
+    // Setup fails if price closes past the far end of the sweep candle.
+    failed = pendingSide == 1 ? close < pendingLow : close > pendingHigh
+    // Confirmation: a candle in the trade's colour closing past the sweep candle.
+    confirmed = pendingSide == 1 ? (close > open and close > pendingHigh) : (close < open and close < pendingLow)
+    if failed
+        pendingSide := 0
+    else if confirmed
+        buySignal  := pendingSide == 1
+        sellSignal := pendingSide == -1
+        entryStop  := pendingExtreme
+        pendingSide := 0
+    else
+        pendingLeft -= 1
+        if pendingLeft <= 0
+            pendingSide := 0
+
+// 2) A new sweep starts a pending setup instead of entering at once.
+if not buySignal and not sellSignal and isFlat and pendingSide == 0
+    if hiddenBull
+        pendingSide := 1
+        pendingHigh := high
+        pendingLow := low
+        pendingExtreme := low
+        pendingLeft := confirmBars
+        bullActive := false
+    else if hiddenBear
+        pendingSide := -1
+        pendingHigh := high
+        pendingLow := low
+        pendingExtreme := high
+        pendingLeft := confirmBars
+        bearActive := false
+
+// ---------- TREND FILTER ----------
+// When on, a confirmed buy needs close above the EMA, a sell needs close below it.
+trendEma = ta.ema(close, trendLength)
+if useTrend
+    buySignal  := buySignal and close > trendEma
+    sellSignal := sellSignal and close < trendEma
+
+// Daily trend: yesterday's finished daily EMA, so it never peeks at today.
+dailyEma = request.security(syminfo.tickerid, "D", ta.ema(close, dailyLength)[1], lookahead=barmerge.lookahead_on)
+if useDailyTrend
+    buySignal  := buySignal and close > dailyEma
+    sellSignal := sellSignal and close < dailyEma
+
+// Push the stop a little past the sweep so a small re-test does not stop the trade out.
+atrValue = ta.sma(ta.tr(true), 14)
+if buySignal and not na(atrValue)
+    entryStop := entryStop - stopBufferAtr * atrValue
+if sellSignal and not na(atrValue)
+    entryStop := entryStop + stopBufferAtr * atrValue
+
+// ---------- ENTRY + RISK ----------
+// Size so that hitting the stop loses riskPercent of equity.
+qtyFor(stopDistance) =>
+    stopDistance > syminfo.mintick ? strategy.equity * riskPercent / 100 / (stopDistance * syminfo.pointvalue) : 0.0
+
+if buySignal
+    risk = close - entryStop
+    qty = qtyFor(risk)
+    if qty > 0
+        strategy.entry("APA BUY", strategy.long, qty=qty)
+        // Stop and target are placed on the entry candle, so they protect from the next candle on.
+        strategy.exit("BUY EXIT", "APA BUY", stop=entryStop, limit=close + risk * rr)
+
+if sellSignal
+    risk = entryStop - close
+    qty = qtyFor(risk)
+    if qty > 0
+        strategy.entry("APA SELL", strategy.short, qty=qty)
+        strategy.exit("SELL EXIT", "APA SELL", stop=entryStop, limit=close - risk * rr)
+
+// ---------- VISUALS ----------
+plot(bullActive ? bullInvalidation : na, "Bullish Invalidation", color=color.lime, linewidth=2, style=plot.style_linebr)
+plot(bearActive ? bearInvalidation : na, "Bearish Invalidation", color=color.red, linewidth=2, style=plot.style_linebr)
+plotshape(buySignal, title="APA BUY (confirmed)", style=shape.labelup, location=location.belowbar, color=color.lime, text="BUY", textcolor=color.black)
+plotshape(sellSignal, title="APA SELL (confirmed)", style=shape.labeldown, location=location.abovebar, color=color.red, text="SELL", textcolor=color.white)
+plotshape(showHidden and hiddenBull, title="Hidden Bullish", style=shape.diamond, location=location.belowbar, color=color.aqua, text="H")
+plotshape(showHidden and hiddenBear, title="Hidden Bearish", style=shape.diamond, location=location.abovebar, color=color.orange, text="H")
+plotshape(showX and (invalidBull or invalidBear), title="Invalidation X", style=shape.xcross, location=location.abovebar, color=color.red, text="X")
+plotshape(showNew and (bullBreak or bearBreak), title="New Invalidation", style=shape.labeldown, location=location.abovebar, color=color.yellow, text="NEW")
+
+// ---------- ALERTS ----------
+alertcondition(hiddenBull or hiddenBear, "APA SWEEP", "APA sweep - waiting for confirmation candle")
+alertcondition(buySignal, "APA BUY", "APA bullish entry confirmed")
+alertcondition(sellSignal, "APA SELL", "APA bearish entry confirmed")
+alertcondition(invalidBull or invalidBear, "APA INVALIDATION", "APA setup invalidated")

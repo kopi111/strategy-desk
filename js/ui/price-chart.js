@@ -108,8 +108,14 @@
 
     /** Replaces the potential trade's lines. They are kept apart from the overlays, so clearing those leaves these. */
     setTradeLines(lines) {
-      for (const line of this.tradeLines) this.series.removePriceLine(line);
-      this.tradeLines = lines.map(({ price, title, color }) => this.series.createPriceLine({ price, title, color, lineWidth: 2, lineStyle: 0, axisLabelVisible: true }));
+      this.setLineGroup('trade', lines);
+    }
+
+    /** Replaces one named group of price lines (e.g. 'trade', 'apa'), leaving every other group alone. */
+    setLineGroup(group, lines) {
+      this.lineGroups = this.lineGroups || {};
+      for (const line of this.lineGroups[group] || []) this.series.removePriceLine(line);
+      this.lineGroups[group] = lines.map(({ price, title, color, style = 0 }) => this.series.createPriceLine({ price, title, color, lineWidth: 2, lineStyle: style, axisLabelVisible: true }));
     }
 
     setMarkers(markers) {

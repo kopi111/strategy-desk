@@ -42,6 +42,9 @@
       showApaZones: false, showApaMarkers: false, showApaTradeLines: false, maxZonesShown: 8,
       showDetails: true,
       showPotentialTrade: true,
+      // APA 15m setup + 5m confirmation: potential buys/sells on the chart. 'profit' = 2R target, 'winRate' = 0.75R target.
+      showApaConfirm: true,
+      apaConfirmMode: 'profit',
       // The chart opens filling the window. "Exit full screen" or Esc returns to the normal page.
       fullView: true,
       markup: {

@@ -74,3 +74,6 @@ backups/
 
 # Downloaded candles for the FVG study, can be fetched again
 research/fvg-return/data/
+
+# Watcher state, forward-test ledgers and big backtest trade lists (local only)
+research/cinco-apa/output/

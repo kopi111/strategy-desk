@@ -1,0 +1,35 @@
+{
+  "balance": 200,
+  "risk_percent": 1.0,
+  "check_every_minutes": 5,
+  "markets": [
+    "R_10",
+    "R_15",
+    "R_25",
+    "R_30",
+    "R_50",
+    "R_75",
+    "R_90",
+    "R_100",
+    "1HZ10V",
+    "1HZ15V",
+    "1HZ25V",
+    "1HZ30V",
+    "1HZ50V",
+    "1HZ75V",
+    "1HZ90V",
+    "1HZ100V",
+    "1HZ150V",
+    "1HZ250V"
+  ],
+  "setups": {
+    "1H": {
+      "rr": 0.5,
+      "stop_buffer_atr": 1.0,
+      "daily_ema": 50
+    }
+  },
+  "alert_on_setup": true,
+  "forward_from": "2026-10-01",
+  "backtest_note": "(reference only: Oct-Nov was inside the backtest data, so this is NOT a forward test)."
+}
