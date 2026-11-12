@@ -2,7 +2,7 @@
   'use strict';
 
   const { $, $$, escapeHtml, format, trendTone, emptyState, segmented } = APA.ui;
-  const CHART_TIMEFRAMES = ['1m', '5m', '15m', '1h', '4h', '1d'];
+  const CHART_TIMEFRAMES = ['1m', '5m', '15m', '30m', '1h', '4h', '1d'];
   const COLORS = APA.chartColors;
   const RECENT_EVENTS_LISTED = 8;
   const DAILY_BARS_SHOWN = 270;

@@ -24,7 +24,7 @@
     ] },
   ];
 
-  const ENTRY_TIMEFRAMES = ['1m', '5m', '15m'];
+  const ENTRY_TIMEFRAMES = ['1m', '5m', '15m', '30m'];
   const SIDEBAR_HIDDEN_KEY = 'strategy-desk.sidebar-hidden';
   const PHONE_LAYOUT_QUERY = '(max-width: 920px)';
 
@@ -202,10 +202,21 @@
       const strategy = this.settings.strategy;
       segmented($('#entryTimeframe'), ENTRY_TIMEFRAMES.map((key) => ({ value: key, label: APA.timeframes.byKey(key).label })),
         strategy.entryTimeframe, (value) => {
+          if (!this.entryFitsStructure(value)) return;
           const next = APA.settings.mergeDeep(this.settings, { strategy: { entryTimeframe: value } });
           this.updateSettings(next);
         });
       $('#timeframeStack').innerHTML = `<span><b>${APA.timeframes.byKey(strategy.structureTimeframe).label}</b> zones</span><span><b>${APA.timeframes.byKey(strategy.biasTimeframe).label}</b> bias &amp; targets</span>`;
+    }
+
+    // This function checks that a new entry timeframe is lower than the zones timeframe.
+    // It says what to change and puts the buttons back when it is not.
+    entryFitsStructure(entryKey) {
+      const structureKey = this.settings.strategy.structureTimeframe;
+      if (APA.timeframes.byKey(entryKey).seconds < APA.timeframes.byKey(structureKey).seconds) return true;
+      toast(`A ${APA.timeframes.byKey(entryKey).label} entry needs zones on a higher timeframe than ${APA.timeframes.byKey(structureKey).label}. Change "Structure timeframe" in Settings first.`, 'error');
+      this.renderTimeframes();
+      return false;
     }
 
     renderSource(status) {

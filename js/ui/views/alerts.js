@@ -4,7 +4,7 @@
   const { $, $$, escapeHtml, format, emptyState, segmented, toast } = APA.ui;
   const LOG_KEY = 'strategy-desk.alert-log.v1';
   const LOG_LIMIT = 100;
-  const WATCH_TIMEFRAMES = ['1m', '5m', '15m', '1h', '4h'];
+  const WATCH_TIMEFRAMES = ['1m', '5m', '15m', '30m', '1h', '4h'];
 
   /** Plays two short rising beeps. The browser only allows sound after a click, so the player waits for one. */
   class AlertSound {

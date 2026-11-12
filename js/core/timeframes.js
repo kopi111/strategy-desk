@@ -5,6 +5,7 @@
     { key: '1m', label: '1m', seconds: 60 },
     { key: '5m', label: '5m', seconds: 300 },
     { key: '15m', label: '15m', seconds: 900 },
+    { key: '30m', label: '30m', seconds: 1800 },
     { key: '1h', label: '1H', seconds: 3600 },
     { key: '4h', label: '4H', seconds: 14400 },
     { key: '1d', label: '1D', seconds: 86400 },

@@ -76,7 +76,7 @@
     gaps.sort((first, second) => first - second);
     const median = gaps[Math.floor(gaps.length / 2)];
     const known = APA.timeframes.all.find((timeframe) => timeframe.seconds === median);
-    if (!known) throw new Error(`Candles are ${median} seconds apart; use 1m, 5m, 15m, 1H, 4H or 1D data.`);
+    if (!known) throw new Error(`Candles are ${median} seconds apart; use 1m, 5m, 15m, 30m, 1H, 4H or 1D data.`);
     return median;
   }
 

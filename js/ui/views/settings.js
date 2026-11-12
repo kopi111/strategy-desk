@@ -61,9 +61,9 @@
           <div class="panel settings-section">
             <div class="panel-head"><div><h2>${APA.icons.layers}Timeframes and structure</h2><p>Videos: mark structure on 4H/1H, enter on 5m or 1m.</p></div></div>
             <div class="form-grid">
-              <label class="field"><span>Structure timeframe (zones)</span>${timeframeSelect('strategy.structureTimeframe', ['15m', '1h', '4h'])}</label>
+              <label class="field"><span>Structure timeframe (zones)</span>${timeframeSelect('strategy.structureTimeframe', ['15m', '30m', '1h', '4h'])}</label>
               <label class="field"><span>Bias timeframe (trend + targets)</span>${timeframeSelect('strategy.biasTimeframe', ['1h', '4h', '1d'])}</label>
-              <label class="field"><span>Entry timeframe</span>${timeframeSelect('strategy.entryTimeframe', ['1m', '5m', '15m'])}</label>
+              <label class="field"><span>Entry timeframe</span>${timeframeSelect('strategy.entryTimeframe', ['1m', '5m', '15m', '30m'])}</label>
               ${numberInputs(settings, NUMBER_FIELDS.structure)}
             </div>
           </div>
