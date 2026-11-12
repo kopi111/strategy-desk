@@ -19,6 +19,7 @@
     ] },
     { group: 'Strategy', items: [
       { view: 'rules', label: 'Strategy rules', icon: 'rules' },
+      { view: 'mentor', label: 'Mentor', icon: 'shield' },
       { view: 'settings', label: 'Settings', icon: 'settings' },
     ] },
   ];

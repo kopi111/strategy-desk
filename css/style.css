@@ -388,6 +388,17 @@ tr.is-clickable { cursor: pointer; }
 .settings-section { display: flex; flex-direction: column; gap: 16px; }
 .settings-section h3 { margin: 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
 .model-table td { white-space: normal; }
+/* mentor page */
+.mentor-lesson { display: flex; flex-direction: column; gap: 10px; }
+.mentor-lesson h3 { margin: 0; font-size: 14.5px; }
+.mentor-lesson > p { margin: 0; color: var(--text-soft); font-size: 13px; }
+.mentor-lesson details { border-top: 1px solid var(--border); padding-top: 10px; }
+.mentor-lesson summary { cursor: pointer; color: var(--accent); font-size: 12.5px; font-weight: 600; }
+.mentor-lesson ul { margin: 10px 0 0; padding-left: 18px; color: var(--text-soft); font-size: 13px; display: flex; flex-direction: column; gap: 4px; }
+.mentor-desk { margin-top: 10px !important; padding: 10px 12px; border-radius: var(--radius-small); background: var(--bg-raised); border: 1px solid var(--border); font-size: 12.5px; }
+.mentor-lesson .button { margin-top: 10px; }
+.mentor-lessons { align-items: start; }
+.mentor-streak th, .mentor-streak td { padding: 8px 6px; }
 .unverified { font-size: 10px; font-weight: 800; letter-spacing: 0.07em; color: var(--wait); margin-left: 4px; }
 .file-drop { border: 1.5px dashed var(--border-strong); border-radius: 12px; padding: 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; background: var(--bg-raised); }
 .instrument-table input { min-height: 32px; padding: 5px 8px; font-family: var(--mono); font-size: 12px; width: 100px; }

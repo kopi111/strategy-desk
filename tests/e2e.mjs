@@ -237,6 +237,27 @@ await step('rules page', async () => {
 });
 await shot('08-rules');
 
+await step('mentor page blocks a plan with no stop, passes a full one, and sizes it', async () => {
+  await page.click('.nav-item[data-view="mentor"]');
+  await page.fill('[data-view="mentor"] [name="entry"]', '100');
+  await page.fill('[data-view="mentor"] [name="target"]', '104');
+  await page.fill('[data-view="mentor"] [name="reason"]', 'Retest of the 1H RBS level');
+  await page.click('[data-view="mentor"] button[type="submit"]');
+  await page.waitForSelector('[data-view="mentor"] .tag-bear');
+  const focused = await page.evaluate(() => document.activeElement.name);
+  if (focused !== 'stop') throw new Error(`expected focus on the stop box, got ${focused}`);
+  await page.fill('[data-view="mentor"] [name="stop"]', '99');
+  await page.click('[data-view="mentor"] button[type="submit"]');
+  await page.waitForSelector('[data-view="mentor"] .tag-bull');
+  const rows = await page.$$('[data-view="mentor"] .mentor-streak tbody tr');
+  if (rows.length !== 5) throw new Error(`expected 5 losing-run rows, got ${rows.length}`);
+  const lessons = await page.$$('.mentor-lesson');
+  if (lessons.length !== 10) throw new Error(`expected 10 lessons, got ${lessons.length}`);
+  await page.click('[data-view="mentor"] [data-action="size"]');
+  await page.waitForFunction(() => location.hash === '#calculator' && document.querySelector('[data-view="calculator"] [name="stop"]').value !== '');
+});
+await shot('08b-mentor');
+
 await step('settings validation names the field', async () => {
   await page.click('.nav-item[data-view="settings"]');
   await page.fill('[name="risk.riskPercent"]', '5');
@@ -253,7 +274,7 @@ await shot('09-settings');
 for (const width of [400, 820]) {
   await step(`no sideways scroll at ${width}px`, async () => {
     await page.setViewportSize({ width, height: 900 });
-    for (const view of ['dashboard', 'chart', 'alerts', 'calculator', 'journal', 'backtest', 'settings', 'rules']) {
+    for (const view of ['dashboard', 'chart', 'alerts', 'calculator', 'journal', 'backtest', 'settings', 'rules', 'mentor']) {
       await page.evaluate((name) => { location.hash = name; }, view);
       await page.waitForTimeout(400);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

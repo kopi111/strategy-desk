@@ -11,6 +11,7 @@ export const CORE_SCRIPTS = [
   'js/core/candles.js', 'js/core/structure.js', 'js/core/zones.js', 'js/core/sessions.js',
   'js/core/engine.js', 'js/core/signal.js', 'js/core/performance.js', 'js/core/position-size.js', 'js/core/ml-model.js',
   'js/core/smart-money.js', 'js/core/potential-trade.js', 'js/core/apa-confirm.js', 'js/core/potential-trade-backtest.js', 'js/core/alert-watcher.js',
+  'js/core/trade-plan-check.js', 'js/core/risk-streak.js',
   'js/data/demo-feed.js', 'js/data/csv-feed.js',
 ];
 
