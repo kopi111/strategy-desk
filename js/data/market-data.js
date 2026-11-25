@@ -18,22 +18,47 @@
     }
 
     async connect() {
-      const { source, derivEndpoint, derivAppId } = this.settings.data;
+      const { source, derivAppId } = this.settings.data;
       const instruments = APA.settings.instruments(this.settings);
       if (source === 'demo') return this.use(new APA.DemoFeed(instruments), 'Demo data selected in Settings.');
       if (source === 'csv') {
         if (!this.csvFeed) throw new Error('Choose a CSV file in Settings → Data source first.');
         return this.use(this.csvFeed, 'Candles from your CSV file.');
       }
-      const deriv = new APA.DerivFeed({ endpoint: derivEndpoint, appId: derivAppId });
       try {
-        await deriv.connect();
-        return this.use(deriv, 'Live candles from Deriv. Only closed candles are used for signals.');
+        return this.use(await this.openDeriv(derivAppId), 'Live candles from Deriv. Only closed candles are used for signals.');
       } catch (error) {
         if (source === 'deriv') throw error;
         console.warn('[market-data] Deriv unavailable, using demo data', error);
         return this.use(new APA.DemoFeed(instruments), `${error.message} Showing DEMO data instead; these are not market prices.`);
       }
+    }
+
+    /** This function tries each Deriv address in turn and returns the first one that opens. */
+    async openDeriv(appId) {
+      let lastError = new Error('Could not open a connection to Deriv.');
+      for (const endpoint of APA.settings.derivEndpoints(this.settings)) {
+        const deriv = new APA.DerivFeed({ endpoint, appId });
+        try {
+          await deriv.connect();
+          return deriv;
+        } catch (error) {
+          console.warn(`[market-data] ${endpoint} did not open`, error);
+          lastError = error;
+        }
+      }
+      throw lastError;
+    }
+
+    /** This function switches to Deriv if it opens now, and leaves the current feed alone if it does not. */
+    async tryLive() {
+      const deriv = await this.openDeriv(this.settings.data.derivAppId);
+      return this.use(deriv, 'Live candles from Deriv. Only closed candles are used for signals.');
+    }
+
+    /** This function reports whether the desk is on DEMO only because Deriv could not be reached. */
+    isOnDemoBecauseDerivFailed() {
+      return this.settings.data.source === 'auto' && this.feed && this.feed.kind === 'demo';
     }
 
     use(feed, detail) {

@@ -26,6 +26,8 @@
 
   const ENTRY_TIMEFRAMES = ['1m', '5m', '15m', '30m'];
   const SIDEBAR_HIDDEN_KEY = 'strategy-desk.sidebar-hidden';
+  // While on DEMO because Deriv failed, the desk tries Deriv again this often.
+  const DERIV_RETRY_MS = 60000;
   const PHONE_LAYOUT_QUERY = '(max-width: 920px)';
 
   /** Holds shared state, loads candles, runs the strategy and tells the views when something changed. */
@@ -75,6 +77,7 @@
     }
 
     async connect() {
+      this.stopDerivRetry();
       this.renderSource({ kind: 'connecting', label: 'Connecting…', detail: 'Opening the market data feed.' });
       try {
         this.renderSource(await this.market.connect());
@@ -83,7 +86,29 @@
         toast(error.message, 'error');
         return;
       }
+      if (this.market.isOnDemoBecauseDerivFailed()) this.startDerivRetry();
       await this.refresh();
+    }
+
+    /** This function tries Deriv again every minute while the desk is on DEMO, and goes back to LIVE when it answers. */
+    startDerivRetry() {
+      this.derivRetryTimer = setInterval(async () => {
+        try {
+          const status = await this.market.tryLive();
+          this.stopDerivRetry();
+          this.renderSource(status);
+          toast('Deriv is answering again. Back on live prices.', 'success');
+          await this.refresh();
+        } catch (error) {
+          console.warn('[app] Deriv retry failed, will try again', error);
+        }
+      }, DERIV_RETRY_MS);
+    }
+
+    /** This function stops the once-a-minute Deriv retry. */
+    stopDerivRetry() {
+      clearInterval(this.derivRetryTimer);
+      this.derivRetryTimer = null;
     }
 
     /** Reloads candles for the selected market, re-runs the strategy and restarts the live stream. */

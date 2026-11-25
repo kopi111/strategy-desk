@@ -45,7 +45,9 @@ STATE_FILE = HERE / "output" / f"signals{SUFFIX}-state.json"
 LOG_FILE = HERE / f"signals{SUFFIX}.log"
 INSTRUMENTS_FILE = HERE.parent.parent / "js" / "core" / "instruments.js"
 CREDENTIALS_FILE = Path.home() / ".credentials" / "all-projects.env"
-DERIV_ENDPOINTS = ["wss://red.derivws.com/websockets/v3?app_id=1089",
+# Deriv's new public feed first; the old addresses (HTTP 520 since 2026-11-24) are kept as backups.
+DERIV_ENDPOINTS = ["wss://api.derivws.com/trading/v1/options/ws/public?app_id=1089",
+                   "wss://red.derivws.com/websockets/v3?app_id=1089",
                    "wss://red.binaryws.com/websockets/v3?app_id=1089"]
 SECONDS = {"15m": 900, "30m": 1800, "1H": 3600, "2H": 7200, "4H": 14400}
 CANDLES_TO_LOAD = 3000
@@ -123,7 +125,7 @@ class DerivFeed:
                 return
             except Exception:
                 continue
-        raise ConnectionError("Cannot reach Deriv (tried red.derivws.com and red.binaryws.com)")
+        raise ConnectionError("Cannot reach Deriv (tried api.derivws.com, red.derivws.com and red.binaryws.com)")
 
     def ask(self, request):
         """Sends one request; Deriv drops idle connections between checks, so reconnect and retry once."""

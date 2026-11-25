@@ -3,6 +3,11 @@
 
   const STORAGE_KEY = 'strategy-desk.settings.v1';
 
+  // Deriv's public price feed. The new address comes first; the old ones are kept as backups.
+  // Since 2026-11-24 the old addresses answer HTTP 520, so they are only tried if the new one fails.
+  const DERIV_PUBLIC_ENDPOINT = 'wss://api.derivws.com/trading/v1/options/ws/public';
+  const DERIV_BACKUP_ENDPOINTS = ['wss://red.derivws.com/websockets/v3', 'wss://ws.derivws.com/websockets/v3'];
+
   // Every number here that the videos never stated is marked UNVERIFIED in docs/STRATEGY-RULES.md section 4.
   const DEFAULTS = {
     strategy: {
@@ -64,7 +69,7 @@
     },
     data: {
       source: 'auto',
-      derivEndpoint: 'wss://red.derivws.com/websockets/v3', // ws.derivws.com returns HTTP 520 from this network
+      derivEndpoint: DERIV_PUBLIC_ENDPOINT,
       derivAppId: '1089',
       candleCount: 5000,
     },
@@ -87,8 +92,20 @@
     return merged;
   }
 
+  /** This function loads the saved settings on top of the defaults. */
   function load() {
-    return mergeDeep(clone(DEFAULTS), APA.storage.readJson(STORAGE_KEY));
+    return moveOffOldDerivAddress(mergeDeep(clone(DEFAULTS), APA.storage.readJson(STORAGE_KEY)));
+  }
+
+  /** This function swaps an old saved Deriv address for the new one, so old browsers do not stay on DEMO. */
+  function moveOffOldDerivAddress(settings) {
+    if (DERIV_BACKUP_ENDPOINTS.includes(settings.data.derivEndpoint)) settings.data.derivEndpoint = DERIV_PUBLIC_ENDPOINT;
+    return settings;
+  }
+
+  /** This function lists the Deriv addresses to try, the chosen one first, without repeats. */
+  function derivEndpoints(settings) {
+    return [...new Set([settings.data.derivEndpoint, DERIV_PUBLIC_ENDPOINT, ...DERIV_BACKUP_ENDPOINTS])];
   }
 
   function save(settings) {
@@ -107,5 +124,5 @@
     }));
   }
 
-  APA.settings = { defaults: () => clone(DEFAULTS), load, save, reset, instruments, mergeDeep };
+  APA.settings = { defaults: () => clone(DEFAULTS), load, save, reset, instruments, mergeDeep, derivEndpoints };
 })((globalThis.APA = globalThis.APA || {}));
