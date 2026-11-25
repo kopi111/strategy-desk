@@ -30,7 +30,7 @@ function readGold() {
 }
 
 /** Returns a function giving a higher timeframe's trend at any moment, using only candles already closed then. */
-function trendReader(candles, seconds, window) {
+export function trendReader(candles, seconds, window) {
   const higher = APA.candles.resample(candles, seconds);
   let cachedIndex = -2;
   let cachedTrend = 'none';
@@ -45,14 +45,14 @@ function trendReader(candles, seconds, window) {
 }
 
 /** The price the trade really starts at on the next candle, or NaN if it did not fill. A waiting plan gets one candle to fill. */
-function fillPrice(plan, candle) {
+export function fillPrice(plan, candle) {
   if (plan.status === 'ready') return candle.open;
   if (plan.side === 'buy') return candle.low <= plan.entry ? Math.min(candle.open, plan.entry) : NaN;
   return candle.high >= plan.entry ? Math.max(candle.open, plan.entry) : NaN;
 }
 
 /** Follows a filled trade to its stop or target. If one candle touches both, the stop counts, which is the cautious answer. */
-function exitOf(plan, candles, fillIndex) {
+export function exitOf(plan, candles, fillIndex) {
   const buying = plan.side === 'buy';
   for (let index = fillIndex; index < candles.length; index++) {
     const candle = candles[index];
@@ -67,20 +67,20 @@ function exitOf(plan, candles, fillIndex) {
 }
 
 /** Works out a finished trade's result in R, before and after spread. */
-function resultOf(plan, entry, exit, spreadShare) {
+export function resultOf(plan, entry, exit, spreadShare) {
   const risk = Math.abs(entry - plan.stop);
   const grossR = (plan.side === 'buy' ? exit - entry : entry - exit) / risk;
   const reward = Math.abs(plan.target - entry);
-  return { grossR, netR: grossR - (entry * spreadShare) / risk, side: plan.side, breakEven: risk / (risk + reward) };
+  return { grossR, netR: grossR - (entry * spreadShare) / risk, side: plan.side, breakEven: risk / (risk + reward), entry, risk, rewardToRisk: reward / risk };
 }
 
 /** Is this fill still a sensible trade? The next candle can open past the stop or target. */
-function isValidFill(plan, entry) {
+export function isValidFill(plan, entry) {
   return plan.side === 'buy' ? entry > plan.stop && entry < plan.target : entry < plan.stop && entry > plan.target;
 }
 
 /** Walks through history one closed candle at a time, one trade at a time. */
-function run(candles, spreadShare) {
+export function run(candles, spreadShare, findExit = exitOf) {
   const hourTrend = trendReader(candles, HOUR_SECONDS, CANDLES_NEEDED.hour);
   const fourHourTrend = trendReader(candles, FOUR_HOUR_SECONDS, CANDLES_NEEDED.fourHour);
   const trades = [];
@@ -95,7 +95,7 @@ function run(candles, spreadShare) {
     if (plan.status === 'none') continue;
     const entry = fillPrice(plan, candles[index + 1]);
     if (!isValidFill(plan, entry)) continue;
-    const { exit, index: exitIndex } = exitOf(plan, candles, index + 1);
+    const { exit, index: exitIndex } = findExit(plan, candles, index + 1);
     if (Number.isNaN(exit)) break;
     trades.push({ ...resultOf(plan, entry, exit, spreadShare), time: candles[index + 1].time });
     index = exitIndex;
@@ -103,21 +103,27 @@ function run(candles, spreadShare) {
   return trades;
 }
 
-const [symbol, mode] = process.argv.slice(2);
-const real = symbol === GOLD ? readGold() : readCandles(symbol, '15m');
-const candles = mode === 'shuffled' ? shuffledCandles(real, randomSource(SHUFFLE_SEED)) : real;
-const trades = run(candles, symbol === GOLD ? GOLD_SPREAD_SHARE : SPREAD_SHARE[symbol]);
-const summary = summarize(trades.map((trade) => trade.netR));
-const wins = trades.filter((trade) => trade.grossR > 0).length;
-const average = (pick) => trades.reduce((sum, trade) => sum + pick(trade), 0) / Math.max(1, trades.length);
-const half = Math.floor(trades.length / 2);
-const meanOf = (list) => list.reduce((sum, trade) => sum + trade.netR, 0) / Math.max(1, list.length);
-const result = {
-  symbol, mode: mode || 'real', from: new Date(candles[0].time * 1000).toISOString().slice(0, 10), to: new Date(candles.at(-1).time * 1000).toISOString().slice(0, 10),
-  trades: trades.length, winRate: wins / Math.max(1, trades.length), breakEven: average((trade) => trade.breakEven),
-  grossR: average((trade) => trade.grossR), netR: average((trade) => trade.netR), t: summary.t,
-  totalR: trades.reduce((sum, trade) => sum + trade.netR, 0), firstHalfR: meanOf(trades.slice(0, half)), lastHalfR: meanOf(trades.slice(half)),
-};
-mkdirSync(join(HERE, 'results'), { recursive: true });
-writeFileSync(join(HERE, 'results', `${symbol}-${result.mode}.json`), JSON.stringify(result, null, 2));
-console.log(JSON.stringify(result));
+/** The command-line part: tests one market and writes its JSON file. */
+function main() {
+  const [symbol, mode] = process.argv.slice(2);
+  const real = symbol === GOLD ? readGold() : readCandles(symbol, '15m');
+  const candles = mode === 'shuffled' ? shuffledCandles(real, randomSource(SHUFFLE_SEED)) : real;
+  const trades = run(candles, symbol === GOLD ? GOLD_SPREAD_SHARE : SPREAD_SHARE[symbol]);
+  const summary = summarize(trades.map((trade) => trade.netR));
+  const wins = trades.filter((trade) => trade.grossR > 0).length;
+  const average = (pick) => trades.reduce((sum, trade) => sum + pick(trade), 0) / Math.max(1, trades.length);
+  const half = Math.floor(trades.length / 2);
+  const meanOf = (list) => list.reduce((sum, trade) => sum + trade.netR, 0) / Math.max(1, list.length);
+  const result = {
+    symbol, mode: mode || 'real', from: new Date(candles[0].time * 1000).toISOString().slice(0, 10), to: new Date(candles.at(-1).time * 1000).toISOString().slice(0, 10),
+    trades: trades.length, winRate: wins / Math.max(1, trades.length), breakEven: average((trade) => trade.breakEven),
+    grossR: average((trade) => trade.grossR), netR: average((trade) => trade.netR), t: summary.t,
+    totalR: trades.reduce((sum, trade) => sum + trade.netR, 0), firstHalfR: meanOf(trades.slice(0, half)), lastHalfR: meanOf(trades.slice(half)),
+  };
+  mkdirSync(join(HERE, 'results'), { recursive: true });
+  writeFileSync(join(HERE, 'results', `${symbol}-${result.mode}.json`), JSON.stringify(result, null, 2));
+  console.log(JSON.stringify(result));
+}
+
+// Only run when launched directly, so another script can import the functions above.
+if (process.argv[1] === fileURLToPath(import.meta.url)) main();

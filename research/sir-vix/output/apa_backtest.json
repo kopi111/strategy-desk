@@ -1,0 +1,354 @@
+{
+  "1R": {
+    "breakeven_win_rate": 0.5,
+    "all_symbols": {
+      "trades": 37,
+      "win_rate": 0.351,
+      "net_R": -11.0,
+      "avg_R": -0.297,
+      "t_stat": -1.87
+    },
+    "by_symbol": {
+      "R_10": {
+        "trades": 4,
+        "win_rate": 0.5,
+        "net_R": 0.0,
+        "avg_R": 0.0,
+        "t_stat": 0.0
+      },
+      "R_25": {
+        "trades": 3,
+        "win_rate": 0.333,
+        "net_R": -1.0,
+        "avg_R": -0.333,
+        "t_stat": -0.5
+      },
+      "R_75": {
+        "trades": 6,
+        "win_rate": 0.333,
+        "net_R": -2.0,
+        "avg_R": -0.333,
+        "t_stat": -0.79
+      },
+      "R_100": {
+        "trades": 0
+      },
+      "1HZ10V": {
+        "trades": 4,
+        "win_rate": 0.25,
+        "net_R": -2.0,
+        "avg_R": -0.5,
+        "t_stat": -1.0
+      },
+      "1HZ15V": {
+        "trades": 2,
+        "win_rate": 0.0,
+        "net_R": -2.0,
+        "avg_R": -1.0,
+        "t_stat": null
+      },
+      "1HZ25V": {
+        "trades": 1,
+        "win_rate": 0.0,
+        "net_R": -1.0,
+        "avg_R": -1.0,
+        "t_stat": NaN
+      },
+      "1HZ30V": {
+        "trades": 8,
+        "win_rate": 0.5,
+        "net_R": 0.0,
+        "avg_R": 0.0,
+        "t_stat": 0.0
+      },
+      "1HZ75V": {
+        "trades": 3,
+        "win_rate": 0.667,
+        "net_R": 1.0,
+        "avg_R": 0.333,
+        "t_stat": 0.5
+      },
+      "1HZ90V": {
+        "trades": 3,
+        "win_rate": 0.333,
+        "net_R": -1.0,
+        "avg_R": -0.333,
+        "t_stat": -0.5
+      },
+      "1HZ100V": {
+        "trades": 3,
+        "win_rate": 0.0,
+        "net_R": -3.0,
+        "avg_R": -1.0,
+        "t_stat": null
+      }
+    }
+  },
+  "2R": {
+    "breakeven_win_rate": 0.333,
+    "all_symbols": {
+      "trades": 103,
+      "win_rate": 0.35,
+      "net_R": 5.0,
+      "avg_R": 0.049,
+      "t_stat": 0.34
+    },
+    "by_symbol": {
+      "R_10": {
+        "trades": 6,
+        "win_rate": 0.667,
+        "net_R": 6.0,
+        "avg_R": 1.0,
+        "t_stat": 1.58
+      },
+      "R_25": {
+        "trades": 11,
+        "win_rate": 0.364,
+        "net_R": 1.0,
+        "avg_R": 0.091,
+        "t_stat": 0.2
+      },
+      "R_75": {
+        "trades": 14,
+        "win_rate": 0.429,
+        "net_R": 4.0,
+        "avg_R": 0.286,
+        "t_stat": 0.69
+      },
+      "R_100": {
+        "trades": 6,
+        "win_rate": 0.333,
+        "net_R": 0.0,
+        "avg_R": 0.0,
+        "t_stat": 0.0
+      },
+      "1HZ10V": {
+        "trades": 9,
+        "win_rate": 0.444,
+        "net_R": 3.0,
+        "avg_R": 0.333,
+        "t_stat": 0.63
+      },
+      "1HZ15V": {
+        "trades": 6,
+        "win_rate": 0.167,
+        "net_R": -3.0,
+        "avg_R": -0.5,
+        "t_stat": -1.0
+      },
+      "1HZ25V": {
+        "trades": 9,
+        "win_rate": 0.333,
+        "net_R": 0.0,
+        "avg_R": 0.0,
+        "t_stat": 0.0
+      },
+      "1HZ30V": {
+        "trades": 14,
+        "win_rate": 0.286,
+        "net_R": -2.0,
+        "avg_R": -0.143,
+        "t_stat": -0.38
+      },
+      "1HZ75V": {
+        "trades": 9,
+        "win_rate": 0.444,
+        "net_R": 3.0,
+        "avg_R": 0.333,
+        "t_stat": 0.63
+      },
+      "1HZ90V": {
+        "trades": 14,
+        "win_rate": 0.286,
+        "net_R": -2.0,
+        "avg_R": -0.143,
+        "t_stat": -0.38
+      },
+      "1HZ100V": {
+        "trades": 5,
+        "win_rate": 0.0,
+        "net_R": -5.0,
+        "avg_R": -1.0,
+        "t_stat": null
+      }
+    }
+  },
+  "3R": {
+    "breakeven_win_rate": 0.25,
+    "all_symbols": {
+      "trades": 168,
+      "win_rate": 0.262,
+      "net_R": 8.0,
+      "avg_R": 0.048,
+      "t_stat": 0.35
+    },
+    "by_symbol": {
+      "R_10": {
+        "trades": 10,
+        "win_rate": 0.4,
+        "net_R": 6.0,
+        "avg_R": 0.6,
+        "t_stat": 0.92
+      },
+      "R_25": {
+        "trades": 17,
+        "win_rate": 0.294,
+        "net_R": 3.0,
+        "avg_R": 0.176,
+        "t_stat": 0.39
+      },
+      "R_75": {
+        "trades": 22,
+        "win_rate": 0.364,
+        "net_R": 10.0,
+        "avg_R": 0.455,
+        "t_stat": 1.08
+      },
+      "R_100": {
+        "trades": 12,
+        "win_rate": 0.333,
+        "net_R": 4.0,
+        "avg_R": 0.333,
+        "t_stat": 0.59
+      },
+      "1HZ10V": {
+        "trades": 19,
+        "win_rate": 0.263,
+        "net_R": 1.0,
+        "avg_R": 0.053,
+        "t_stat": 0.13
+      },
+      "1HZ15V": {
+        "trades": 7,
+        "win_rate": 0.143,
+        "net_R": -3.0,
+        "avg_R": -0.429,
+        "t_stat": -0.75
+      },
+      "1HZ25V": {
+        "trades": 13,
+        "win_rate": 0.154,
+        "net_R": -5.0,
+        "avg_R": -0.385,
+        "t_stat": -0.92
+      },
+      "1HZ30V": {
+        "trades": 23,
+        "win_rate": 0.261,
+        "net_R": 1.0,
+        "avg_R": 0.043,
+        "t_stat": 0.12
+      },
+      "1HZ75V": {
+        "trades": 14,
+        "win_rate": 0.286,
+        "net_R": 2.0,
+        "avg_R": 0.143,
+        "t_stat": 0.29
+      },
+      "1HZ90V": {
+        "trades": 24,
+        "win_rate": 0.208,
+        "net_R": -4.0,
+        "avg_R": -0.167,
+        "t_stat": -0.49
+      },
+      "1HZ100V": {
+        "trades": 7,
+        "win_rate": 0.0,
+        "net_R": -7.0,
+        "avg_R": -1.0,
+        "t_stat": null
+      }
+    }
+  },
+  "5R": {
+    "breakeven_win_rate": 0.167,
+    "all_symbols": {
+      "trades": 261,
+      "win_rate": 0.165,
+      "net_R": -3.0,
+      "avg_R": -0.011,
+      "t_stat": -0.08
+    },
+    "by_symbol": {
+      "R_10": {
+        "trades": 20,
+        "win_rate": 0.15,
+        "net_R": -2.0,
+        "avg_R": -0.1,
+        "t_stat": -0.2
+      },
+      "R_25": {
+        "trades": 29,
+        "win_rate": 0.172,
+        "net_R": 1.0,
+        "avg_R": 0.034,
+        "t_stat": 0.08
+      },
+      "R_75": {
+        "trades": 31,
+        "win_rate": 0.258,
+        "net_R": 17.0,
+        "avg_R": 0.548,
+        "t_stat": 1.14
+      },
+      "R_100": {
+        "trades": 25,
+        "win_rate": 0.16,
+        "net_R": -1.0,
+        "avg_R": -0.04,
+        "t_stat": -0.09
+      },
+      "1HZ10V": {
+        "trades": 30,
+        "win_rate": 0.167,
+        "net_R": 0.0,
+        "avg_R": 0.0,
+        "t_stat": 0.0
+      },
+      "1HZ15V": {
+        "trades": 8,
+        "win_rate": 0.125,
+        "net_R": -2.0,
+        "avg_R": -0.25,
+        "t_stat": -0.33
+      },
+      "1HZ25V": {
+        "trades": 17,
+        "win_rate": 0.118,
+        "net_R": -5.0,
+        "avg_R": -0.294,
+        "t_stat": -0.61
+      },
+      "1HZ30V": {
+        "trades": 32,
+        "win_rate": 0.188,
+        "net_R": 4.0,
+        "avg_R": 0.125,
+        "t_stat": 0.3
+      },
+      "1HZ75V": {
+        "trades": 23,
+        "win_rate": 0.174,
+        "net_R": 1.0,
+        "avg_R": 0.043,
+        "t_stat": 0.09
+      },
+      "1HZ90V": {
+        "trades": 30,
+        "win_rate": 0.133,
+        "net_R": -6.0,
+        "avg_R": -0.2,
+        "t_stat": -0.53
+      },
+      "1HZ100V": {
+        "trades": 16,
+        "win_rate": 0.062,
+        "net_R": -10.0,
+        "avg_R": -0.625,
+        "t_stat": -1.67
+      }
+    }
+  }
+}

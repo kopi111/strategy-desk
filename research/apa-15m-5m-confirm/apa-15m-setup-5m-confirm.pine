@@ -1,0 +1,197 @@
+//@version=6
+// CINCO APA - 15m setup, 5m confirmation candle.
+// PUT THIS ON THE 5-MINUTE CHART.
+// 1) The APA setup (structure break, then a sweep of the invalidation level that closes back inside)
+//    is found on the 15-minute chart, using CLOSED 15m candles only (no repainting).
+// 2) Nothing is entered on the setup. The script waits for a 5m confirmation candle.
+// 3) Entry = close of the 5m confirmation candle. Stop = sweep extreme + ATR buffer. Target = RR x risk.
+// Tested defaults (gold, Oct 2023 - Sep 2026, spread charged): 5m CHoCH confirmation, stop 0.5 ATR past
+// the sweep, RR 2.0, window 3 x 15m -> 126 trades, 43.7% wins, +35.3R, t 2.1. Promising, NOT proven.
+// No edge on the Deriv Vix indices - do not use it there.
+strategy("CINCO APA - 15m setup / 5m confirmation",
+     overlay=true,
+     initial_capital=200,
+     pyramiding=0,
+     process_orders_on_close=true)
+
+// ---------- SETTINGS ----------
+setupTf       = input.timeframe("15", "Setup timeframe")
+swingLength   = input.int(5, "Setup swing detection (setup timeframe)", minval=2)
+confirmType   = input.string("CHoCH 5m", "Confirmation candle", options=["CHoCH 5m", "Break sweep candle", "Engulfing"])
+swing5Length  = input.int(3, "Chart swing length for CHoCH", minval=1)
+windowSetups  = input.int(3, "Setup expires after N setup-timeframe candles", minval=1, maxval=12)
+rr            = input.float(2.0, "Risk Reward", minval=0.5, step=0.25)
+stopBufferAtr = input.float(0.5, "Stop buffer past the sweep (x ATR 14 of the chart)", minval=0, step=0.25)
+riskPercent   = input.float(1.0, "Risk per trade (% of equity)", minval=0.1, maxval=10)
+useDailyTrend = input.bool(false, "Daily trend filter (yesterday's daily EMA) - did not help on gold")
+dailyLength   = input.int(50, "Daily EMA length", minval=5)
+useHours      = input.bool(false, "Only trade London + New York (07:00-19:59 UTC) - did not help on gold")
+
+// ---------- 15m SETUP (runs inside the setup timeframe) ----------
+// The same APA rules as the original script, but on the setup timeframe.
+// Values come back one candle late ([1]) with lookahead on: that is the standard way to use only
+// the last CLOSED setup candle, so nothing changes after the fact.
+apaSetup() =>
+    // Swing highs/lows are only confirmed swingLength candles after they form.
+    ph = ta.pivothigh(high, swingLength, swingLength)
+    pl = ta.pivotlow(low, swingLength, swingLength)
+    var float lastHigh = na
+    var float lastLow = na
+    var float bullInvalidation = na
+    var float bearInvalidation = na
+    var bool bullActive = false
+    var bool bearActive = false
+    // Remember the newest confirmed swing high and low.
+    if not na(ph)
+        lastHigh := ph
+    if not na(pl)
+        lastLow := pl
+    // A close through the last swing is a break of structure.
+    bullBreak = not na(lastHigh) and close > lastHigh and close[1] <= lastHigh
+    bearBreak = not na(lastLow) and close < lastLow and close[1] >= lastLow
+    // The break sets the invalidation level at the opposite swing.
+    if bullBreak and not na(lastLow)
+        bullInvalidation := lastLow
+        bullActive := true
+        bearActive := false
+    if bearBreak and not na(lastHigh)
+        bearInvalidation := lastHigh
+        bearActive := true
+        bullActive := false
+    // The sweep: wick through the level, close back on the right side of it.
+    hiddenBull = bullActive and low < bullInvalidation and close > bullInvalidation
+    hiddenBear = not hiddenBull and bearActive and high > bearInvalidation and close < bearInvalidation
+    // A sweep is used once.
+    if hiddenBull
+        bullActive := false
+    if hiddenBear
+        bearActive := false
+    // A full close through the level kills the structure.
+    if bullActive and close < bullInvalidation
+        bullActive := false
+    if bearActive and close > bearInvalidation
+        bearActive := false
+    [hiddenBull[1], hiddenBear[1], high[1], low[1], time_close[1]]
+
+[setupBull, setupBear, setupHigh, setupLow, setupClosedAt] = request.security(syminfo.tickerid, setupTf, apaSetup(), lookahead=barmerge.lookahead_on)
+
+// A new setup appears on the first 5m candle after the 15m sweep candle closed.
+newSetup = ta.change(setupClosedAt) != 0 and (setupBull or setupBear)
+setupMs = timeframe.in_seconds(setupTf) * 1000
+
+// ---------- 5m HELPERS ----------
+// Newest confirmed 5m swing high/low (for the CHoCH confirmation).
+ph5 = ta.pivothigh(high, swing5Length, swing5Length)
+pl5 = ta.pivotlow(low, swing5Length, swing5Length)
+var float swingHigh5 = na
+var float swingLow5 = na
+// 14-candle ATR of the 5m chart, used to push the stop past the sweep.
+atrValue = ta.sma(ta.tr(true), 14)
+// Yesterday's finished daily EMA (never peeks at today).
+dailyEma = request.security(syminfo.tickerid, "D", ta.ema(close, dailyLength)[1], lookahead=barmerge.lookahead_on)
+hourUtc = hour(time, "UTC")
+
+// ---------- PENDING SETUP ----------
+var int   pendingSide    = 0      // 1 = waiting to buy, -1 = waiting to sell, 0 = nothing
+var float pendingHigh    = na     // 15m sweep candle high
+var float pendingLow     = na     // 15m sweep candle low
+var float pendingExtreme = na     // lowest low (buy) / highest high (sell) since the setup = stop
+var int   pendingExpires = na     // time the setup stops being valid
+
+isFlat = strategy.position_size == 0
+buySignal = false
+sellSignal = false
+cancelled = false
+float entryStop = na
+
+// 1) Take a new 15m setup only when flat and nothing is already waiting.
+if newSetup and isFlat and pendingSide == 0
+    pendingSide    := setupBull ? 1 : -1
+    pendingHigh    := setupHigh
+    pendingLow     := setupLow
+    pendingExtreme := setupBull ? setupLow : setupHigh
+    pendingExpires := setupClosedAt + windowSetups * setupMs
+
+// 2) Work the waiting setup with this 5m candle.
+if pendingSide != 0 and isFlat
+    if time >= pendingExpires
+        // Too late: the setup expired without a confirmation.
+        pendingSide := 0
+        cancelled := true
+    else
+        // Track the sweep extreme so the stop sits beyond the whole move.
+        pendingExtreme := pendingSide == 1 ? math.min(pendingExtreme, low) : math.max(pendingExtreme, high)
+        // The setup fails if a 5m candle closes past the far end of the sweep candle.
+        failed = pendingSide == 1 ? close < pendingLow : close > pendingHigh
+        // The confirmation candle must be in the trade's colour.
+        inColour = pendingSide == 1 ? close > open : close < open
+        bodyTop = math.max(open[1], close[1])
+        bodyBottom = math.min(open[1], close[1])
+        confirmed = switch confirmType
+            "Break sweep candle" => pendingSide == 1 ? close > pendingHigh : close < pendingLow
+            "CHoCH 5m" => pendingSide == 1 ? (not na(swingHigh5) and close > swingHigh5) : (not na(swingLow5) and close < swingLow5)
+            => pendingSide == 1 ? (close >= bodyTop and open <= bodyBottom) : (close <= bodyBottom and open >= bodyTop)
+        if failed
+            pendingSide := 0
+            cancelled := true
+        else if inColour and confirmed
+            buySignal  := pendingSide == 1
+            sellSignal := pendingSide == -1
+            entryStop  := pendingExtreme
+            pendingSide := 0
+
+// 3) Optional filters (both off by default: they did not help in the gold test).
+if useDailyTrend
+    buySignal  := buySignal and close > dailyEma
+    sellSignal := sellSignal and close < dailyEma
+if useHours
+    inHours = hourUtc >= 7 and hourUtc <= 19
+    buySignal  := buySignal and inHours
+    sellSignal := sellSignal and inHours
+
+// 4) Push the stop a little past the sweep.
+if buySignal and not na(atrValue)
+    entryStop := entryStop - stopBufferAtr * atrValue
+if sellSignal and not na(atrValue)
+    entryStop := entryStop + stopBufferAtr * atrValue
+
+// 5) Update the 5m swings AFTER the check, so a candle never confirms on its own swing.
+if not na(ph5)
+    swingHigh5 := ph5
+if not na(pl5)
+    swingLow5 := pl5
+
+// ---------- ENTRY + RISK ----------
+// Size so that hitting the stop loses riskPercent of equity.
+qtyFor(stopDistance) =>
+    stopDistance > syminfo.mintick ? strategy.equity * riskPercent / 100 / (stopDistance * syminfo.pointvalue) : 0.0
+
+if buySignal
+    risk = close - entryStop
+    qty = qtyFor(risk)
+    if qty > 0
+        strategy.entry("APA BUY", strategy.long, qty=qty)
+        // Stop and target are placed on the entry candle and protect from the next candle on.
+        strategy.exit("BUY EXIT", "APA BUY", stop=entryStop, limit=close + risk * rr)
+
+if sellSignal
+    risk = entryStop - close
+    qty = qtyFor(risk)
+    if qty > 0
+        strategy.entry("APA SELL", strategy.short, qty=qty)
+        strategy.exit("SELL EXIT", "APA SELL", stop=entryStop, limit=close - risk * rr)
+
+// ---------- VISUALS ----------
+plot(pendingSide != 0 ? pendingHigh : na, "Sweep candle high", color=color.new(color.aqua, 30), style=plot.style_linebr)
+plot(pendingSide != 0 ? pendingLow : na, "Sweep candle low", color=color.new(color.orange, 30), style=plot.style_linebr)
+plotshape(newSetup and setupBull, title="15m bullish sweep", style=shape.diamond, location=location.belowbar, color=color.aqua, text="SETUP")
+plotshape(newSetup and setupBear, title="15m bearish sweep", style=shape.diamond, location=location.abovebar, color=color.orange, text="SETUP")
+plotshape(buySignal, title="BUY (5m confirmed)", style=shape.labelup, location=location.belowbar, color=color.lime, text="BUY", textcolor=color.black)
+plotshape(sellSignal, title="SELL (5m confirmed)", style=shape.labeldown, location=location.abovebar, color=color.red, text="SELL", textcolor=color.white)
+plotshape(cancelled, title="Setup cancelled", style=shape.xcross, location=location.abovebar, color=color.gray, text="X")
+
+// ---------- ALERTS ----------
+alertcondition(newSetup, "APA 15m SETUP", "APA 15m sweep - get ready, wait for the 5m confirmation candle")
+alertcondition(buySignal, "APA BUY", "APA BUY - 5m confirmation closed, take the trade")
+alertcondition(sellSignal, "APA SELL", "APA SELL - 5m confirmation closed, take the trade")
+alertcondition(cancelled, "APA SETUP CANCELLED", "APA setup cancelled or expired - no trade")

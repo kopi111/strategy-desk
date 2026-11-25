@@ -1,0 +1,63 @@
+Telegram phone alerts (2026-11-03)
+[x] 1. alerts/telegram-setup.mjs: ask for the bot token, find the chat id, save both to ~/.credentials/all-projects.env, send a test message
+[x] 2. alerts/telegram-watcher.mjs + alerts/telegram-alerts.json: run the same alert rules without the browser and send to Telegram
+[x] 3. Tell the phone if Deriv stops answering, and when it comes back
+[x] 4. Tests with a fake Telegram, and a run beside the open Desk (Deriv may refuse a second connection)
+[ ] 5. Background service that starts by itself -- WAITING: kopi runs alerts/telegram-setup.mjs with a real bot token
+[x] 6. README and memory note
+[x] 7. Longer live run of the watcher: confirm it really detects setups
+[x] 8. Chart looks like Deriv's (kopi's screenshot): white, teal/red candles, tool rail with working tools, OHLC header, range bar, % log auto
+[x] 9. Fix: a second click within half a second lost a drawing point
+[x] 10. Button to hide the sidebar; button to hide the section under the chart
+[x] 11. research/fvg-return: backtest whether Vix price really returns to fair value gaps, against controls
+[x] 12. research/fvg-return/confirmation.mjs: test confirmation candles on the FVG retest, with an unseen 30% check
+[x] 13. research/fvg-return/gold.mjs: FVG return and confirmation test on 3 years of real gold prices
+[x] 14. research/strategy-search: find strategies that win over 55% AND profit after spread, on unseen data
+[x] 15. research/fvg-return/pin-bar-older.mjs: one-shot test of the 1H gold pin bar rule on 2016-2022 prices
+[x] 16. js/core/potential-trade.js: buy or sell, entry, stop and take profit from closed candles, with tests
+[x] 17. research/potential-trade/backtest.mjs: backtest that exact rule, so the pages can show its real result
+[x] 18. Chart page: draw the sell or buy, stop and TP lines, with a card showing the backtest result
+[x] 19. New Trades page: every market's potential trade, plus the gold trend rule
+[x] 20. README, e2e and memory note
+[x] 21. Commit, push to github.com/kopi111/strategy-desk and turn on GitHub Pages (kopi asked)
+[x] 22. Add every Volatility index to the Desk, backtest the new ones, and push
+
+APA 15m setup + 5m confirmation on the chart (2026-11-06)
+[x] 20. js/core/apa-confirm.js: port of research/apa-15m-5m-confirm/backtest_mtf.py (15m sweep setup, 5m CHoCH confirm, stop 0.5 ATR, RR 2)
+[x] 21. Parity test: JS port gives the same trades as the Python backtest on the same candles
+[x] 22. Chart: potential BUY/SELL card (setup waiting / confirmed with entry, stop, TP), lines + markers, on/off button (saved)
+[x] 23. Card shows the honest backtest result (gold +35.3R unproven; forex and Vix lose)
+[~] 24. Run in the browser on live Deriv (done), then push to GitHub Pages (waiting for kopi)
+
+Volatility 100 + Volatility 100 (1s) APA search (2026-11-09)
+[x] 25. research/vix100-apa/apa_setups.py: sweep, SBR/RBS retest and QM retest setups on any timeframe, no look-ahead
+[x] 26. research/vix100-apa/search.py: 1,080 settings per market, choose on Nov-Jun only, score on Jul-Nov, spread charged
+[x] 27. Same search on 32 shuffled price histories, so we know how good "the best" looks by luck
+[x] 28. RESULTS.md with the verdict, tests for the new setups
+
+Better backtest of the potential-trade rule on Volatility 25 (1s) (2026-11-10)
+[x] 29. research/potential-trade/backtest.mjs: export its functions so a second script can reuse them, same results
+[x] 30. research/potential-trade/better-backtest.mjs: 5m exits, spread levels, time split, buys/sells, stop size, shuffled histories
+[x] 31. Results written to research/potential-trade/BETTER-1HZ25V.md
+
+Volatility 100 + Volatility 100 (1s) wide quant search (2026-11-10)
+[x] 32. research/vix100-quant: refresh 5m Deriv candles to today
+[x] 33. Rules, engine and metrics with no look-ahead, plus tests
+[x] 34. About 3,000 settings per market, chosen on Nov-Jun only, scored on Jul-Nov, walk-forward, spread + slippage
+[x] 35. Same search on 40 shuffled price histories (luck check)
+[x] 36. RESULTS.md, top 10, all-tests CSV, equity and drawdown chart
+
+Mentor page from the day-trading skill (2026-11-12)
+[x] 37. js/core/trade-plan-check.js: check a written plan (stop, sides, reward:risk, risk %, reason), with tests
+[x] 38. js/core/risk-streak.js: account left after a losing run, and the gain needed to get back, with tests
+[x] 39. js/core/mentor-guide.js: plain lessons (simple first, then depth) with what this Desk found
+[x] 40. js/ui/views/mentor.js + nav + index.html + CSS: plan check, losing-run table, lessons; "Size it" opens Position size
+[x] 41. e2e step, check at phone width, run all tests
+[x] 42. Commit only the Mentor files and push to kopi111/strategy-desk
+
+Deriv feed moved (2026-11-25): old red.derivws.com / ws.derivws.com return HTTP 520 since 11-24 ~16:40, site fell back to DEMO
+[x] 20. Site: use Deriv's new public feed wss://api.derivws.com/trading/v1/options/ws/public, old addresses kept as backups
+[x] 21. Site: browsers that saved the old address in Settings switch to the new one by themselves
+[x] 22. Site: while on DEMO because Deriv failed, try Deriv again every minute and switch back to LIVE by itself
+[x] 23. Telegram Vix watcher + research scripts: new feed first, restart the service
+[x] 24. Tests + live check, push to GitHub Pages, check the live site shows LIVE

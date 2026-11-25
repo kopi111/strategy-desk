@@ -1,14 +1,16 @@
 // 3-year backtest of the dashboard's own engine on real HistData.com 1-minute prices.
 // Run: node research/backtest-3y/run.mjs [SYMBOL ...]
-import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadCore } from '../../tests/load-core.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const M1_DIR = join(HERE, 'm1');
+const DERIV_DIR = join(HERE, 'deriv');
 const FROM = Date.UTC(2023, 9, 1) / 1000;
 const TO = Date.UTC(2026, 9, 1) / 1000;
+// Deriv synthetics: Deriv's own candles from fetch-deriv.mjs. Forex and gold: HistData.com 1-minute files.
 const HISTDATA_UTC_OFFSET_SECONDS = 5 * 3600; // HistData stamps are EST with no daylight saving
 const SECONDS = { entry: 300, structure: 3600, bias: 14400 };
 const RISK_PERCENT = 1;
@@ -64,10 +66,23 @@ function yearOf(trade) {
   return new Date(trade.entryTime * 1000).getUTCFullYear();
 }
 
+function readDerivCandles(symbol, seconds) {
+  const candles = JSON.parse(readFileSync(join(DERIV_DIR, `${symbol}_${seconds}.json`), 'utf8'));
+  const now = Math.floor(Date.now() / 1000);
+  return candles.filter((candle) => candle.time + seconds <= now);
+}
+
+function loadCandleSets(instrument) {
+  if (existsSync(join(DERIV_DIR, `${instrument.symbol}_${SECONDS.entry}.json`))) {
+    return { entry: readDerivCandles(instrument.symbol, SECONDS.entry), structure: readDerivCandles(instrument.symbol, SECONDS.structure), bias: readDerivCandles(instrument.symbol, SECONDS.bias) };
+  }
+  const minutes = readMinuteCandles(instrument.shortName);
+  return { entry: aggregate(minutes, SECONDS.entry), structure: aggregate(minutes, SECONDS.structure), bias: aggregate(minutes, SECONDS.bias) };
+}
+
 function backtest(symbol) {
   const instrument = APA.instruments.bySymbol(instruments, symbol);
-  const minutes = readMinuteCandles(instrument.shortName);
-  const candleSets = { entry: aggregate(minutes, SECONDS.entry), structure: aggregate(minutes, SECONDS.structure), bias: aggregate(minutes, SECONDS.bias) };
+  const candleSets = loadCandleSets(instrument);
   const started = Date.now();
   const simulation = APA.engine.run({ instrument, strategy: settings.strategy, candleSets, timeframeSeconds: SECONDS });
   const closed = simulation.trades.filter((trade) => trade.status === 'closed');

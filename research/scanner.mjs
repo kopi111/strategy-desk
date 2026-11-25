@@ -1,5 +1,5 @@
 // Runs the dashboard's engine on the latest candles for one market.
-// Every market comes from Deriv (red.derivws.com); forex and gold fall back to Yahoo Finance if Deriv fails.
+// Every market comes from Deriv (api.derivws.com); forex and gold fall back to Yahoo Finance if Deriv fails.
 import { loadCore } from '../tests/load-core.mjs';
 
 const MARKETS = {
@@ -7,7 +7,7 @@ const MARKETS = {
   frxUSDJPY: 'JPY=X', frxUSDCAD: 'CAD=X', frxUSDCHF: 'CHF=X', frxXAUUSD: 'GC=F',
 };
 const SYNTHETICS = ['R_25', 'R_75', 'R_100', 'stpRNG2'];
-const DERIV_ENDPOINT = 'wss://red.derivws.com/websockets/v3?app_id=1089';
+const DERIV_ENDPOINT = 'wss://api.derivws.com/trading/v1/options/ws/public?app_id=1089';
 const SECONDS = { entry: 300, structure: 3600, bias: 14400 };
 const DERIV_COUNTS = { 300: 5000, 3600: 5000, 14400: 2000 };
 

@@ -1,0 +1,2 @@
+seed,setting,t_A,net_R_A,net_R_B,t_B,trades_B,markets_positive_B
+-1,cross_rsi SMA100 240m stop 2 ATR RR 3,1.6481479597839912,52.384681232090685,0.38370250109178716,0.01776347413266152,161,7

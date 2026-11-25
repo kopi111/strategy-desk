@@ -1,11 +1,11 @@
-// Downloads Deriv candle history (5m, 1H, 4H) into research/backtest-3y/deriv/<symbol>_<seconds>.json.
-// Uses red.derivws.com because ws.derivws.com returns HTTP 520 from this network.
+// Downloads Deriv candle history (as far back as Deriv keeps, about one year) (5m, 1H, 4H) into research/backtest-3y/deriv/<symbol>_<seconds>.json.
+// Uses Deriv's new public feed; the old ws/red.derivws.com addresses return HTTP 520 since 2026-11-24.
 // Run: node research/backtest-3y/fetch-deriv.mjs R_25 R_75 R_100 stpRNG2
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const ENDPOINT = 'wss://red.derivws.com/websockets/v3?app_id=1089';
+const ENDPOINT = 'wss://api.derivws.com/trading/v1/options/ws/public?app_id=1089';
 const OUT_DIR = join(dirname(fileURLToPath(import.meta.url)), 'deriv');
 const FROM = Date.UTC(2023, 9, 1) / 1000;
 const GRANULARITIES = [300, 3600, 14400];
@@ -33,12 +33,16 @@ function request(socket, payload) {
 async function history(socket, symbol, granularity) {
   const byTime = new Map();
   let end = 'latest';
+  let previousEarliest = Infinity;
   while (true) {
     const { candles = [] } = await request(socket, { ticks_history: symbol, style: 'candles', granularity, count: PAGE, end });
     for (const { epoch, open, high, low, close } of candles) byTime.set(epoch, { time: epoch, open: +open, high: +high, low: +low, close: +close });
     const earliest = candles[0]?.epoch;
-    if (!earliest || earliest <= FROM || candles.length < 2) break;
+    // Deriv keeps about one year of candles; past that it returns a short page, then starts again from today.
+    if (!earliest || earliest <= FROM || earliest >= previousEarliest || candles.length < PAGE) break;
+    previousEarliest = earliest;
     end = earliest - 1;
+    if (process.env.VERBOSE) console.log(symbol, granularity, candles.length, new Date(earliest * 1000).toISOString());
   }
   return [...byTime.values()].filter((candle) => candle.time >= FROM).sort((first, second) => first.time - second.time);
 }

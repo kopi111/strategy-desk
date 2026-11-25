@@ -12,7 +12,7 @@ const TIMEFRAMES = [{ label: '5m', seconds: 300, days: 370 }, { label: '15m', se
 const PAGE = 5000;
 const REQUESTS_PER_CONNECTION = 150;
 const RETRIES = 5;
-const ENDPOINTS = ['wss://red.derivws.com/websockets/v3?app_id=1089', 'wss://red.binaryws.com/websockets/v3?app_id=1089'];
+const ENDPOINTS = ['wss://api.derivws.com/trading/v1/options/ws/public?app_id=1089', 'wss://red.derivws.com/websockets/v3?app_id=1089', 'wss://red.binaryws.com/websockets/v3?app_id=1089'];
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 let socket = null;

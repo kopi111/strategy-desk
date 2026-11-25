@@ -1,0 +1,120 @@
+[
+  {
+    "market": "R_100",
+    "chosen": "ema_cross(9,21) 30m stop 2 ATR RR 1 vol any",
+    "folds": [
+      {
+        "from": "2026-03-01 00:00:00",
+        "to": "2026-04-20 22:40:00",
+        "setting": "bollinger_reversion(20,2.5) 15m stop 2 ATR RR 1 vol low",
+        "trades": 26,
+        "net_r": -5.239511486907885
+      },
+      {
+        "from": "2026-04-20 22:45:00",
+        "to": "2026-06-10 21:25:00",
+        "setting": "ema_cross(9,21) 30m stop 2 ATR RR 1 vol any",
+        "trades": 79,
+        "net_r": 7.300255809114526
+      },
+      {
+        "from": "2026-06-10 21:30:00",
+        "to": "2026-07-31 20:10:00",
+        "setting": "bollinger_reversion(20,2.0) 30m stop 2 ATR opposite signal vol high",
+        "trades": 45,
+        "net_r": -8.434828380692103
+      },
+      {
+        "from": "2026-07-31 20:15:00",
+        "to": "2026-09-20 18:55:00",
+        "setting": "bollinger_reversion(20,2.5) 60m stop 3 ATR RR 2 vol any",
+        "trades": 9,
+        "net_r": 1.1367616837679626
+      },
+      {
+        "from": "2026-09-20 19:00:00",
+        "to": "2026-11-10 17:45:00",
+        "setting": "rsi_reversion(14,30,70) 30m stop 2 ATR RR 3 vol high",
+        "trades": 26,
+        "net_r": 11.86900232885795
+      }
+    ],
+    "regimes": {
+      "sideways": 16.19556047315512,
+      "bull": 9.535376179471664,
+      "bear": 12.819784978113965
+    },
+    "buys_net_r": 22.324798188709124,
+    "sells_net_r": 16.45678672100401,
+    "buy_hold_percent_A": -69.3078727264681,
+    "buy_hold_percent_B": 93.26746240669289,
+    "settings_tested": 3168,
+    "first_candle": "2025-11-03 17:10:00",
+    "last_candle": "2026-11-10 17:45:00",
+    "split": "2026-07-01 00:00:00",
+    "stop_multiples": [
+      1.0,
+      2.0,
+      3.0
+    ]
+  },
+  {
+    "market": "1HZ100V",
+    "chosen": "rsi_reversion(2,10,90) 60m stop 2 ATR RR 1 vol high",
+    "folds": [
+      {
+        "from": "2026-03-01 00:00:00",
+        "to": "2026-04-20 22:40:00",
+        "setting": "bollinger_reversion(20,2.0) 30m stop 3 ATR RR 2 vol any",
+        "trades": 36,
+        "net_r": 11.63489735694408
+      },
+      {
+        "from": "2026-04-20 22:45:00",
+        "to": "2026-06-10 21:25:00",
+        "setting": "bollinger_reversion(20,2.0) 30m stop 3 ATR RR 2 vol any",
+        "trades": 42,
+        "net_r": -1.995893296396293
+      },
+      {
+        "from": "2026-06-10 21:30:00",
+        "to": "2026-07-31 20:10:00",
+        "setting": "bollinger_reversion(20,2.0) 30m stop 3 ATR RR 2 vol any",
+        "trades": 45,
+        "net_r": -0.8005453190142133
+      },
+      {
+        "from": "2026-07-31 20:15:00",
+        "to": "2026-09-20 18:55:00",
+        "setting": "bollinger_reversion(20,2.0) 60m stop 2 ATR RR 1 vol high",
+        "trades": 38,
+        "net_r": -4.687901924789321
+      },
+      {
+        "from": "2026-09-20 19:00:00",
+        "to": "2026-11-10 17:45:00",
+        "setting": "rsi_reversion(14,20,80) 15m stop 1 ATR RR 1 vol high",
+        "trades": 8,
+        "net_r": -4.399575574795748
+      }
+    ],
+    "regimes": {
+      "sideways": 3.848811845112084,
+      "bull": 5.791227829818935,
+      "bear": 11.432650280222262
+    },
+    "buys_net_r": 20.085524566713744,
+    "sells_net_r": 4.688993945943387,
+    "buy_hold_percent_A": -7.811459215354222,
+    "buy_hold_percent_B": 65.52598070424605,
+    "settings_tested": 3168,
+    "first_candle": "2025-11-03 17:15:00",
+    "last_candle": "2026-11-10 17:45:00",
+    "split": "2026-07-01 00:00:00",
+    "stop_multiples": [
+      1.0,
+      2.0,
+      3.0
+    ]
+  }
+]
