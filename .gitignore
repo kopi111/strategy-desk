@@ -77,3 +77,6 @@ research/fvg-return/data/
 
 # Watcher state, forward-test ledgers and big backtest trade lists (local only)
 research/cinco-apa/output/
+
+# Trade alerts already sent (local runs)
+alerts/.sent-trades.json
